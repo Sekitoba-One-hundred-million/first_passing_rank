@@ -1,0 +1,176 @@
+import os
+import copy
+import math
+import random
+import pickle
+import numpy as np
+import sys
+import lightgbm as lgb
+import optuna.integration.lightgbm as test_lgb
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+from chainer import serializers
+import xgboost as xgb
+import pandas as pd
+
+import sekitoba_library as lib
+import sekitoba_data_manage as dm
+
+check_year = 2020
+
+def lg_main( data, params = None ):
+    max_pos = np.max( np.array( data["answer"] ) )
+    lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
+    lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
+
+    lgbm_params =  {
+        'task': 'train',                # 学習、トレーニング ⇔　予測predict
+        'boosting_type': 'gbdt',        # 勾配ブースティング
+        #'objective': 'regression',      # 目的関数：回帰
+        'objective': 'binary',      # 目的関数：回帰
+        #'metric': 'rmse',               # 回帰分析モデルの性能を測る指標
+        'metric': 'auc',               # 回帰分析モデルの性能を測る指標
+        #'learning_rate': 0.1,
+        'early_stopping_rounds': 30
+    }
+
+    bst = lgb.train( params = lgbm_params,
+                     train_set = lgb_train,
+                     valid_sets = [lgb_train, lgb_vaild ],
+                     verbose_eval = 10,
+                     num_boost_round = 5000 )
+    
+    #print( df_importance.head( len( x_list ) ) )
+    dm.pickle_upload( "first_horce_body_lightbgm_model.pickle", bst )
+    #lib.log.write_lightbgm( bst )
+    
+    return bst
+
+def lgb_test( data ):
+    max_pos = np.max( np.array( data["answer"] ) )
+    lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
+    lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
+
+    lgbm_params =  {
+        'task': 'train',                # 学習、トレーニング ⇔　予測predict
+        'boosting_type': 'gbdt',        # 勾配ブースティング
+        'objective': 'regression',      # 目的関数：回帰
+        'metric': 'rmse',               # 回帰分析モデルの性能を測る指標
+        #'learning_rate': 0.1,
+        'early_stopping_rounds': 30
+    }
+
+    bst = test_lgb.train( params = lgbm_params,
+                          train_set = lgb_train,
+                          valid_sets = [lgb_train, lgb_vaild ],
+                          verbose_eval = 10,
+                          num_boost_round = 5000 )
+
+    print( bst.params )
+    lib.log.write( "best_iteration:{}".format( str( bst.best_iteration ) ) )
+    lib.log.write( "best_score:{}".format( str( bst.best_score ) ) )
+    lib.log.write( "best_params:{}".format( str( bst.params ) ) )
+    
+    return bst.params
+"""
+def test( data, model ):
+    predict_answer = model.predict( np.array( data["test_teacher"] ) )
+    x = []
+    diff = 0
+    count = 0
+
+    for i in range( 0, len( predict_answer ) ):
+        #print( predict_answer[i], data["test_answer"][i] )
+        diff += abs( max( predict_answer[i], 0 ) - data["test_answer"][i] )
+        x.append( max( predict_answer[i], 0 ) )
+        count += 1
+
+    print( diff / count )
+    diff = 0
+    a, b = lib.xy_regression_line( x, data["test_answer"] )
+
+    for i in range( 0, len( x ) ):
+        diff += abs( max( a * x[i] + b, 0 ) - data["test_answer"][i] )
+
+    print( "" )
+    print( a, b )
+    print( diff / count )
+
+def simu_test( simu_data, model ):
+    diff = 0
+    count = 0
+
+    for k in simu_data.keys():
+        data = []
+
+        for kk in simu_data[k].keys():
+            instance = {}
+            instance["predict"] = max( model.predict( np.array( [ simu_data[k][kk]["data"] ] ) )[0], 0 )
+            instance["answer"] = simu_data[k][kk]["answer"]
+            data.append( instance )
+
+        sort_list = sorted( data, key=lambda x:x["predict"] )
+        sort_list[0]["predict"] = 0
+        print( sort_list )
+        for i in range( 0, len( sort_list ) ):
+            diff += abs( sort_list[i]["predict"] - sort_list[i]["answer"] )
+            count += 1
+
+    print( diff / count )
+"""
+
+def test( data, model ):
+    predict_answer = model.predict( np.array( data["test_teacher"] ) )
+    diff = 0
+    count = 0
+
+    for i in range( 0, len( predict_answer ) ):
+        #if data["test_answer"][i] == 0:
+        #    continue
+        
+        a = 1 if predict_answer[i] > 0.1 else 0
+        #print( a, predict_answer[i] )
+        
+        if a == int( data["test_answer"][i] ):
+            diff += 1
+        else:
+            print( data["test_body"][i] )
+            
+        count += 1
+
+    print( diff / count * 100 )
+
+def data_check( data ):
+    result = {}
+    result["teacher"] = []
+    result["test_teacher"] = []
+    result["answer"] = []
+    result["test_answer"] = []
+    result["test_body"] = []
+
+    for i in range( 0, len( data["teacher"] ) ):
+        year = data["year"][i]        
+        current_data = data["teacher"][i]
+        answer_horce_body = data["answer"][i]
+
+        if answer_horce_body == 0:
+            answer_horce_body = 1
+        else:
+            answer_horce_body = 0
+
+        if year == "2020":
+            result["test_teacher"].append( current_data )
+            result["test_answer"].append( float( answer_horce_body ) )
+            result["test_body"].append( data["answer"][i] )
+        else:
+            result["teacher"].append( current_data )
+            result["answer"].append( float( answer_horce_body ) )
+
+    return result
+
+def main( data, simu_data ):
+    learn_data = data_check( data )
+    #params = lgb_test( learn_data )
+    model = lg_main( learn_data )
+    test( learn_data, model )
+    #simu_test( simu_data, model )

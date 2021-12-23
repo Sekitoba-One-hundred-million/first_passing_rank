@@ -28,16 +28,16 @@ def data_check( data ):
 
 def main( data, GPU = False ):
     units = {}
-    learn_data = data_check( data )    
+    learn_data = data_check( data )
     #learn_data, a_units = batch_data_check( data )
     n_units = len( data["teacher"][0] )
     print( n_units )
     units["n"] = n_units
     #units["a"] = a_units
 
-    dm.pickle_upload( "last_horce_body_units.pickle", units )
-    model = nn.LastStrightNN( n_units )
+    dm.pickle_upload( "first_horce_body_units.pickle", units )
+    model = nn.FirstStrightNN( n_units )
     model = nn.main( learn_data, model, GPU )
-    dm.model_upload( "last_horce_body_model.pth", model )
+    dm.model_upload( "first_horce_body_model.pth", model )
     
     return model, units

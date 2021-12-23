@@ -34,8 +34,8 @@ class JockeyData:
 
     def data_get( self, horce_id, day, race_num ):
         result = {}
-        instance = { "count": 0, "rank": 0, "one": 0, "two": 0, "three": 0, "time": 0, "up": 0 }
-        instance100 = { "count": 0, "rank": 0, "one": 0, "two": 0, "three": 0, "time": 0, "up": 0 }
+        instance = { "count": 0, "rank": 0, "one": 0, "two": 0, "three": 0, "time": 0, "up": 0, "fhb": 0 }
+        instance100 = { "count": 0, "rank": 0, "one": 0, "two": 0, "three": 0, "time": 0, "up": 0, "fhb": 0 }
         result["all"] = instance
         result["100"] = instance100
         jockey_id = self.jockey_id_data[horce_id][day]

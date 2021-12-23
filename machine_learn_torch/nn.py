@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 import math
 import random
 from torch import nn, optim, cuda
@@ -10,10 +11,10 @@ from tqdm import tqdm
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
 
-class LastStrightNN( nn.Module ):
+class FirstStrightNN( nn.Module ):
 
     def __init__( self, n ):
-        super( LastStrightNN, self ).__init__()
+        super( FirstStrightNN, self ).__init__()
         self.l1 = nn.Linear( n, n )
         self.l2 = nn.Linear( n, n )
         self.l3 = nn.Linear( n, n )
@@ -105,13 +106,15 @@ def main( data, model, GPU = False ):
             print( "GPU使用しようとしましたが失敗しました. 代わりにCPUを使用します." )
     else:
         print( "CPU使用" )
+        
     xp = np
-
     N = len( teacher_data )
     epoch = 300
     batch_size = 2048
     teacher_data = torch.from_numpy( xp.array( teacher_data, dtype = xp.float32 ) ).to( device )
     answer_data = torch.from_numpy( xp.array( answer_data, dtype = xp.float32 ) ).to( device )
+    best_model = None
+    min_diff = 1000000
     print( "learn start" )
     #lib.log.write( "nn learn" )
     
@@ -127,7 +130,6 @@ def main( data, model, GPU = False ):
             y = model.forward( teacher_data[data_list[b:b+batch_size]] )
             loss = F.mse_loss( y, answer_data[data_list[b:b+batch_size]] )
             #loss = F.l1_loss( y, answer_data[data_list[b:b+batch_size]] )
-            #loss = F.cross_entropy( y, answer_data[data_list[b:b+batch_size]].type( torch.long ) )
             all_loss += loss.detach().numpy()
             loss.backward()
             optimizer.step()
@@ -135,6 +137,9 @@ def main( data, model, GPU = False ):
         diff = test( test_teacher, test_answer, model )
         log_text =  "学習:{}回 誤差馬身:{}秒 loss:{}".format( e + 1, diff, all_loss / int( N / batch_size ) )
         print( log_text )
+
+        if 50 < e and diff < min_diff:
+            best_model = copy.deepcopy( model )
         #lib.log.write( log_text )
 
-    return model
+    return best_model
