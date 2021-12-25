@@ -26,10 +26,8 @@ def lg_main( data, params = None ):
     lgbm_params =  {
         'task': 'train',                # 学習、トレーニング ⇔　予測predict
         'boosting_type': 'gbdt',        # 勾配ブースティング
-        #'objective': 'regression',      # 目的関数：回帰
-        'objective': 'binary',      # 目的関数：回帰
-        #'metric': 'rmse',               # 回帰分析モデルの性能を測る指標
-        'metric': 'auc',               # 回帰分析モデルの性能を測る指標
+        'objective': 'regression',      # 目的関数：回帰
+        'metric': 'rmse',               # 回帰分析モデルの性能を測る指標
         #'learning_rate': 0.1,
         'early_stopping_rounds': 30
     }
@@ -72,7 +70,7 @@ def lgb_test( data ):
     lib.log.write( "best_params:{}".format( str( bst.params ) ) )
     
     return bst.params
-"""
+
 def test( data, model ):
     predict_answer = model.predict( np.array( data["test_teacher"] ) )
     x = []
@@ -117,28 +115,6 @@ def simu_test( simu_data, model ):
             count += 1
 
     print( diff / count )
-"""
-
-def test( data, model ):
-    predict_answer = model.predict( np.array( data["test_teacher"] ) )
-    diff = 0
-    count = 0
-
-    for i in range( 0, len( predict_answer ) ):
-        #if data["test_answer"][i] == 0:
-        #    continue
-        
-        a = 1 if predict_answer[i] > 0.1 else 0
-        #print( a, predict_answer[i] )
-        
-        if a == int( data["test_answer"][i] ):
-            diff += 1
-        else:
-            print( data["test_body"][i] )
-            
-        count += 1
-
-    print( diff / count * 100 )
 
 def data_check( data ):
     result = {}
@@ -152,11 +128,6 @@ def data_check( data ):
         year = data["year"][i]        
         current_data = data["teacher"][i]
         answer_horce_body = data["answer"][i]
-
-        if answer_horce_body == 0:
-            answer_horce_body = 1
-        else:
-            answer_horce_body = 0
 
         if year == "2020":
             result["test_teacher"].append( current_data )
