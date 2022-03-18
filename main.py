@@ -1,43 +1,39 @@
 import torch
 import numpy as np
 from argparse import ArgumentParser
+from mpi4py import MPI
 
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
+
 from data_analyze import data_create
-#from machine_learn_torch import learn
-#from machine_learn_torch.nn import FirstStrightNN
 from tree_learn import learn
-from tree_learn import rank_learn
-
-def model_data_create():
-    result = {}
-    units = dm.pickle_load( "first_horce_body_units.pickle" )
-    model = FirstStrightNN( units["n"] )
-    model = dm.model_load( "first_horce_body_model.pth", model )
-    model.eval()
-    simu_data = dm.pickle_load( "first_horce_body_simu_data.pickle" )
-    
-    for k in simu_data.keys():
-        lib.dic_append( result, k, {} )
-        for kk in simu_data[k].keys():
-            data = simu_data[k][kk]["data"]
-            predict_answer = model.forward( torch.tensor( np.array( [ data ], dtype = np.float32 ) ) ).detach().numpy()
-            result[k][kk] = predict_answer[0][0]
-
-    dm.pickle_upload( "first_horce_body.pickle", result )
 
 def tree_model_data_create():
     result = {}
     model = dm.pickle_load( "first_horce_body_lightbgm_model.pickle" )
     simu_data = dm.pickle_load( "first_horce_body_simu_data.pickle" )
-    
+
     for k in simu_data.keys():
+        data = []
         lib.dic_append( result, k, {} )
+        
         for kk in simu_data[k].keys():
-            data = simu_data[k][kk]["data"]
-            predict_answer = model.predict( np.array( [ data ] ) )
-            result[k][kk] = max( predict_answer[0], 0 )
+            instance = {}
+            pah = max( model.predict( np.array( [ simu_data[k][kk]["data"] ] ) )[0], 0 )
+            pah = int( pah * 2 ) / 2
+            
+            instance["predict"] = pah
+            instance["answer"] = simu_data[k][kk]["answer"]
+            instance["kk"] = kk
+            data.append( instance )
+
+        sort_list = sorted( data, key=lambda x:x["predict"] )        
+        
+        for i in range( 0, len( sort_list ) ):
+            pah = sort_list[i]["predict"] - sort_list[0]["predict"]
+            kk = sort_list[i]["kk"]
+            result[k][kk] = max( pah, 0 )
 
     dm.pickle_upload( "first_horce_body.pickle", result )
 
@@ -54,15 +50,16 @@ def main():
     r_check = parser.parse_args().r
 
     if s_check:
-        #model_data_create()
-        tree_model_data_create()
+        tree_model_data_create()            
         return
-    
-    data, simu_data = data_create.main( update = u_check )
-    learn.main( data, simu_data )
-    #rank_learn.main( data )
-    
-    #learn.main( data, GPU = g_check )
-    
+
+    data = data_create.main( update = u_check )
+
+    if not data == None:        
+        learn.main( data["data"], data["simu"] )
+        tree_model_data_create()
+
+    MPI.Finalize()
+            
 if __name__ == "__main__":
     main()

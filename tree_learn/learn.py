@@ -6,12 +6,8 @@ import pickle
 import numpy as np
 import sys
 import lightgbm as lgb
-import optuna.integration.lightgbm as test_lgb
+#import optuna.integration.lightgbm as test_lgb
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-from chainer import serializers
-import xgboost as xgb
-import pandas as pd
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
@@ -78,20 +74,13 @@ def test( data, model ):
     count = 0
 
     for i in range( 0, len( predict_answer ) ):
-        #print( predict_answer[i], data["test_answer"][i] )
-        diff += abs( max( predict_answer[i], 0 ) - data["test_answer"][i] )
+        #print( predict_answer[i], data["test_answer"][i] )        
+        pah = max( predict_answer[i], 0 )
+        pah = int( pah * 2 ) / 2
+        diff += abs( pah - data["test_answer"][i] )
         x.append( max( predict_answer[i], 0 ) )
         count += 1
 
-    print( diff / count )
-    diff = 0
-    a, b = lib.xy_regression_line( x, data["test_answer"] )
-
-    for i in range( 0, len( x ) ):
-        diff += abs( max( a * x[i] + b, 0 ) - data["test_answer"][i] )
-
-    print( "" )
-    print( a, b )
     print( diff / count )
 
 def simu_test( simu_data, model ):
@@ -103,16 +92,22 @@ def simu_test( simu_data, model ):
 
         for kk in simu_data[k].keys():
             instance = {}
-            instance["predict"] = max( model.predict( np.array( [ simu_data[k][kk]["data"] ] ) )[0], 0 )
+            pah = max( model.predict( np.array( [ simu_data[k][kk]["data"] ] ) )[0], 0 )
+            pah = int( pah * 2 ) / 2
+            
+            instance["predict"] = pah
             instance["answer"] = simu_data[k][kk]["answer"]
             data.append( instance )
 
-        sort_list = sorted( data, key=lambda x:x["predict"] )
-        sort_list[0]["predict"] = 0
-        print( sort_list )
+        sort_list = sorted( data, key=lambda x:x["predict"] )        
+        
         for i in range( 0, len( sort_list ) ):
-            diff += abs( sort_list[i]["predict"] - sort_list[i]["answer"] )
+            pah = sort_list[i]["predict"] - sort_list[0]["predict"]
+            diff += abs( pah - sort_list[i]["answer"] )
             count += 1
+            #print( pah, sort_list[i]["answer"] )
+            
+        #print( "" )
 
     print( diff / count )
 
@@ -128,8 +123,8 @@ def data_check( data ):
         year = data["year"][i]        
         current_data = data["teacher"][i]
         answer_horce_body = data["answer"][i]
-
-        if year == "2020":
+        
+        if year == lib.test_year:
             result["test_teacher"].append( current_data )
             result["test_answer"].append( float( answer_horce_body ) )
             result["test_body"].append( data["answer"][i] )
@@ -144,4 +139,4 @@ def main( data, simu_data ):
     #params = lgb_test( learn_data )
     model = lg_main( learn_data )
     test( learn_data, model )
-    #simu_test( simu_data, model )
+    simu_test( simu_data, model )
