@@ -36,6 +36,7 @@ jockey_rank
 jockey_true_skill
 jockey_true_skill_index
 jockey_year_rank
+jockey_limb_judgment
 trainer_true_skill
 trainer_true_skill_index
 limb
@@ -47,6 +48,7 @@ match_rank_index
 money
 mother_rank
 my_limb_count
+odds
 omega
 omega_index
 one_popular_limb

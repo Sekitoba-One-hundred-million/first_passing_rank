@@ -23,10 +23,12 @@ horce_true_skill
 horce_true_skill_index
 jockey_true_skill
 jockey_true_skill_index
+jockey_limb_judgment
 trainer_true_skill
 trainer_true_skill_index
 limb
 my_limb_count
+odds
 one_popular_limb
 one_popular_odds
 past_min_horce_body

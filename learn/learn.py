@@ -102,12 +102,14 @@ def score_check( simu_data, model ):
     simu_predict_data = {}
 
     for race_id in tqdm( simu_data.keys() ):
+        year = race_id[0:4]
         check_data = []
         simu_predict_data[race_id] = {}
         all_horce_num = len( simu_data[race_id] )
         
         for horce_id in simu_data[race_id].keys():
-            predict_score = max( min( int( model.predict( np.array( [ simu_data[race_id][horce_id]["data"] ] ) )[0] ), all_horce_num ), 1 )
+            predict_score = max( min( model.predict( np.array( [ simu_data[race_id][horce_id]["data"] ] ) )[0], all_horce_num ), 1 )
+            predict_score = int( predict_score + 0.5 )
             answer_rank = simu_data[race_id][horce_id]["answer"]["first_passing_rank"]
             check_data.append( { "horce_id": horce_id, "answer": answer_rank, "score": predict_score } )
 
@@ -133,8 +135,10 @@ def score_check( simu_data, model ):
             check_answer = check_data[i]["answer"]
             before_score = current_score
             simu_predict_data[race_id][check_data[i]["horce_id"]] = predict_score
-            score += math.pow( predict_score - check_answer, 2 )
-            count += 1
+
+            if year in lib.test_years:
+                score += math.pow( predict_score - check_answer, 2 )
+                count += 1
             
     score /= count
     score = math.sqrt( score )

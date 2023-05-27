@@ -39,6 +39,7 @@ dm.dl.file_set( "waku_three_rate_data.pickle" )
 dm.dl.file_set( "wrap_data.pickle" )
 dm.dl.file_set( "corner_horce_body.pickle" )
 #dm.dl.file_set( "first_corner_rank.pickle" )
+dm.dl.file_set( "jockey_limb_judgment_data.pickle" )
 dm.dl.file_set( "first_passing_true_skill_data.pickle" )
 
 class OnceData:
@@ -60,6 +61,7 @@ class OnceData:
         self.corner_horce_body = dm.dl.data_get( "corner_horce_body.pickle" )
         #self.first_corner_rank = dm.dl.data_get( "first_corner_rank.pickle" )
         self.first_passing_true_skill_data = dm.dl.data_get( "first_passing_true_skill_data.pickle" )
+        self.jockey_limb_judgment_data = dm.dl.data_get( "jockey_limb_judgment_data.pickle" )
         
         self.race_high_level = RaceHighLevel()
         self.race_type = RaceType()
@@ -72,9 +74,6 @@ class OnceData:
         self.data_name_list = []
         self.write_data_list = []
         self.simu_data = {}
-        self.kind_score_key_list = {}
-        self.kind_score_key_list[data_name.waku_three_rate] = [ "place", "dist", "limb", "baba", "kind" ]
-        self.kind_score_key_list[data_name.limb_score] = [ "place", "dist", "baba", "kind" ]
         self.result = { "answer": [], "teacher": [], "query": [], "year": [], "level": [], "diff": [] }
         self.data_name_read()
 
@@ -119,23 +118,6 @@ class OnceData:
 
         return int( score )
 
-    def kind_score_get( self, data, key_list, key_data, base_key ):
-        score = 0
-        count = 0
-    
-        for i in range( 0, len( key_list ) ):
-            k1 = key_list[i]
-            for r in range( i + 1, len( key_list ) ):
-                k2 = key_list[r]
-                key_name = k1 + "_" + k2
-                try:
-                    score += data[key_name][key_data[k1]][key_data[k2]][base_key]
-                    count += 1
-                except:
-                    continue
-
-        return score
-
     def clear( self ):
         dm.dl.data_clear()
     
@@ -164,10 +146,6 @@ class OnceData:
         if not race_id in self.corner_horce_body:
             return
 
-        #if not race_id in self.first_corner_rank:
-        #    return
-
-        #current_first_corner_rank = self.first_corner_rank[race_id]
         current_horce_body = self.corner_horce_body[race_id]
         min_corner_key = min( self.corner_horce_body[race_id] )
         key_race_money_class = str( int( lib.money_class_get( self.race_money_data[race_id] ) ) )
@@ -402,6 +380,7 @@ class OnceData:
 
             #stright_slope_score = self.race_type.stright_slope( cd, pd )
             high_level_score = self.race_high_level.data_get( cd, pd, ymd )
+            baba = cd.baba_status()
             limb_math = race_limb[kk]#lib.limb_search( pd )
             key_limb = str( int( limb_math ) )            
             race_interval_score = min( max( pd.race_interval(), 0 ), 20 )
@@ -479,8 +458,11 @@ class OnceData:
                 before_first_passing_rank = 0
 
             jockey_year_rank_score = self.jockey_data.year_rank( race_id, horce_id, key_before_year )
-            baba = cd.baba_status()
+            jockey_limb_judgment = -1
             
+            if race_id in self.jockey_limb_judgment_data and horce_id in self.jockey_limb_judgment_data[race_id]:
+                jockey_limb_judgment = self.jockey_limb_judgment_data[race_id][horce_id]
+
             count += 1
             t_instance = {}
             t_instance[data_name.age] = age
@@ -515,8 +497,10 @@ class OnceData:
             t_instance[data_name.jockey_first_passing_true_skill_index] = jockey_first_passing_true_skill_index
             t_instance[data_name.trainer_first_passing_true_skill] = trainer_first_passing_true_skill
             t_instance[data_name.trainer_first_passing_true_skill_index] = trainer_first_passing_true_skill_index
+            t_instance[data_name.jockey_limb_judgment] = jockey_limb_judgment
             t_instance[data_name.limb] = limb_math
             t_instance[data_name.my_limb_count] = my_limb_count_score
+            t_instance[data_name.odds] = cd.odds()
             t_instance[data_name.one_popular_limb] = one_popular_limb
             t_instance[data_name.one_popular_odds] = one_popular_odds
             t_instance[data_name.past_min_horce_body] = past_min_horce_body
