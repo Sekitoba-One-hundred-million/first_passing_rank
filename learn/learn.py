@@ -135,10 +135,8 @@ def score_check( simu_data, model ):
             check_answer = check_data[i]["answer"]
             before_score = current_score
             simu_predict_data[race_id][check_data[i]["horce_id"]] = predict_score
-
-            if year in lib.test_years:
-                score += math.pow( predict_score - check_answer, 2 )
-                count += 1
+            score += math.pow( predict_score - check_answer, 2 )
+            count += 1
             
     score /= count
     score = math.sqrt( score )
