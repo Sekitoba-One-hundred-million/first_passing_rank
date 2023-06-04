@@ -57,7 +57,7 @@ def main():
             for r in range( 0, len( learn_data["teacher"][i] ) ):
                 learn_data["teacher"][i][r] = data_remove( learn_data["teacher"][i][r], remove_list )
 
-        learn.main( data["data"], simu_data )
+        learn.main( data["data"], simu_data, learn = ( l_check or u_check ) )
             
     MPI.Finalize()        
     

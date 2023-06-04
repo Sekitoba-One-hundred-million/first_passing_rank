@@ -2,6 +2,7 @@ import math
 import numpy as np
 import lightgbm as lgb
 from tqdm import tqdm
+from statistics import stdev
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
@@ -19,7 +20,7 @@ def lg_main( data ):
         'learning_rate': 0.01,
         'num_iteration': 10000,
         'min_data_in_bin': 1,
-        'max_depth': 200,
+        'max_depth': 300,
         'num_leaves': 175,
         'min_data_in_leaf': 25,
     }
@@ -65,6 +66,16 @@ def lg_main( data, prod = False ):
         
     return bst
 """
+
+def standardization( data ):
+    ave = sum( data ) / len( data )
+    std = stdev( data )
+
+    for i in range( 0, len( data ) ):
+        data[i] = ( data[i] - ave ) / std
+
+    return data
+
 def data_check( data ):
     result = {}
     result["teacher"] = []
@@ -83,10 +94,32 @@ def data_check( data ):
         else:
             result["query"].append( query )
 
+        n = int( query / 3 )
+        corner_horce_body_list = []
+
+        for r in range( 0, query ):
+            corner_horce_body_list.append( data["horce_body"][i][r] )
+
+        corner_horce_body_list = standardization( corner_horce_body_list )
+
         for r in range( 0, query ):
             current_data = data["teacher"][i][r]
-            current_answer = int( data["answer"][i][r] )
-            
+            first_rank = int( data["answer"][i][r] )
+            current_answer = first_rank
+
+            if first_rank / n < 1:
+                current_answer -= 1
+            elif first_rank / n > 2:
+                current_answer += 1
+
+            if first_rank == 1 or first_rank == 2:
+                current_answer -= 1
+
+            if corner_horce_body_list[r] < -1:
+                current_answer -= 1
+            elif 1 < corner_horce_body_list[r]:
+                current_answer += 1
+                
             if year in lib.test_years:
                 result["test_teacher"].append( current_data )
                 result["test_answer"].append( current_answer )
@@ -97,19 +130,28 @@ def data_check( data ):
     return result
 
 def score_check( simu_data, model ):
-    score = 0
+    score1 = 0
+    score2 = 0
     count = 0
     simu_predict_data = {}
+    predict_use_data = []
 
-    for race_id in tqdm( simu_data.keys() ):
+    for race_id in simu_data.keys():
+        for horce_id in simu_data[race_id].keys():
+            predict_use_data.append( simu_data[race_id][horce_id]["data"] )
+
+    c = 0
+    predict_data = model.predict( np.array( predict_use_data ) )
+
+    for race_id in simu_data.keys():
         year = race_id[0:4]
         check_data = []
         simu_predict_data[race_id] = {}
         all_horce_num = len( simu_data[race_id] )
         
         for horce_id in simu_data[race_id].keys():
-            predict_score = max( min( model.predict( np.array( [ simu_data[race_id][horce_id]["data"] ] ) )[0], all_horce_num ), 1 )
-            predict_score = int( predict_score + 0.5 )
+            predict_score = min( predict_data[c], all_horce_num )
+            c += 1
             answer_rank = simu_data[race_id][horce_id]["answer"]["first_passing_rank"]
             check_data.append( { "horce_id": horce_id, "answer": answer_rank, "score": predict_score } )
 
@@ -120,7 +162,11 @@ def score_check( simu_data, model ):
         
         for i in range( 0, len( check_data ) ):
             predict_score = -1
-            current_score = check_data[i]["score"]
+            current_score = int( check_data[i]["score"] + 0.5 )
+
+            if continue_count >= 2:
+                next_rank += continue_count
+                continue_count = 0
             
             if i == 0:
                 predict_score = 1
@@ -134,13 +180,22 @@ def score_check( simu_data, model ):
 
             check_answer = check_data[i]["answer"]
             before_score = current_score
+            #predict_score = int( check_data[i]["score"] + 0.5 )
             simu_predict_data[race_id][check_data[i]["horce_id"]] = predict_score
-            score += math.pow( predict_score - check_answer, 2 )
-            count += 1
+
+            if year in lib.test_years:
+                score1 += math.pow( predict_score - check_answer, 2 )
+                score2 += math.pow( max( int( check_data[i]["score"] + 0.5 ), 1 ) - check_answer, 2 )
+                count += 1            
             
-    score /= count
-    score = math.sqrt( score )
-    print( "score: {}".format( score ) )
+    score1 /= count
+    score1 = math.sqrt( score1 )
+    print( "score1: {}".format( score1 ) )
+
+    score2 /= count
+    score2 = math.sqrt( score2 )
+    print( "score2: {}".format( score2 ) )
+
     dm.pickle_upload( "predict_first_passing_rank.pickle", simu_predict_data )
     
 """    
@@ -195,10 +250,15 @@ def importance_check( model ):
     for i in range( 0, len( result ) ):
         print( "{}: {}".format( result[i]["key"], result[i]["score"] ) )
 
-def main( data, simu_data ):
+def main( data, simu_data, learn = True ):
     learn_data = data_check( data )
-    model = lg_main( learn_data )
-    importance_check( model )
+
+    if learn:
+        model = lg_main( learn_data )
+        importance_check( model )
+    else:
+        model = dm.pickle_load( lib.name.model_name() )
+        
     score_check( simu_data, model )
     #score_check( learn_data["test_teacher"], learn_data["test_answer"], model )
 
