@@ -15,12 +15,13 @@ if [ -z $tag ]; then
     echo "1: name update"
     echo "2: data update and learn"
     echo "3: learn"
-    echo "4: simulation"
+    echo "4: optuna learn"
+    echo "5: simulation"
 
-    read -p "Enter 1,2,3,4 > " tag
+    read -p "Enter 1,2,3,4,5 > " tag
 fi
 
-if [ !$tag = "1" ] && [ !$tag = "2" ] && [ !$tag = "3" ] && [ !$tag = "4" ]; then
+if [ !$tag = "1" ] && [ !$tag = "2" ] && [ !$tag = "3" ] && [ !$tag = "4" ] && [ !$tag = "5" ]; then
     echo "Wrong number"
     exit 1
 fi
@@ -48,6 +49,10 @@ if [ $tag = "3" ]; then
 fi
 
 if [ $tag = "4" ]; then
+    python main.py -p True
+fi
+
+if [ $tag = "5" ]; then
     python main.py
 fi
 

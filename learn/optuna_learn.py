@@ -1,3 +1,4 @@
+import optuna
 import math
 import numpy as np
 import lightgbm as lgb
@@ -8,66 +9,73 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 #from learn import simulation
 
-def lg_main( data ):
+data = {}
+simu_data = {}
+
+def objective( trial ):
     lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
     lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
+
+    learning_rate = trial.suggest_float( 'learning_rate', 0.01, 0.05 )
+    num_leaves =  trial.suggest_int( "num_leaves", 50, 300 )
+    max_depth = trial.suggest_int( "max_depth", 200, 500 )
+    num_iteration = trial.suggest_int( "num_iteration", 5000, 15000 )
+    min_data_in_leaf = trial.suggest_int( "min_data_in_leaf", 1, 50 )
+    lambda_l1 = trial.suggest_float( "lambda_l1", 0, 0.1 )
+    lambda_l2 = trial.suggest_float( "lambda_l2", 0, 0.1 )
+
     lgbm_params =  {
         #'task': 'train',
         'boosting_type': 'gbdt',
         'objective': 'regression_l2',
         'metric': 'l2',
         'early_stopping_rounds': 30,
-        'learning_rate': 0.01182968479021641,
-        'num_iteration': 9778,
+        'learning_rate': learning_rate,
+        'num_iteration': num_iteration,
         'min_data_in_bin': 1,
-        'max_depth': 303,
-        'num_leaves': 204,
-        'min_data_in_leaf': 1,
-        'lambda_l1': 0.0301332259005943,
-        'lambda_l2': 0.05523927345322703
+        'max_depth': max_depth,
+        'num_leaves': num_leaves,
+        'min_data_in_leaf': min_data_in_leaf,
+        'lambda_l1': lambda_l1,
+        'lambda_l2': lambda_l2
     }
 
-    bst = lgb.train( params = lgbm_params,
+    model = lgb.train( params = lgbm_params,
                      train_set = lgb_train,     
                      valid_sets = [lgb_train, lgb_vaild ],
                      verbose_eval = 10,
                      num_boost_round = 5000 )
-    
-    dm.pickle_upload( lib.name.model_name(), bst )
-        
-    return bst
-"""
-def lg_main( data, prod = False ):
-    max_pos = np.max( np.array( data["answer"] ) )
-    lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ), group = np.array( data["query"] ) )
-    lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ), group = np.array( data["test_query"] ) )
+
+    return score_check( model ) * 10
+
+def best_model_create( params ):
+    lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
+    lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
+
     lgbm_params =  {
         #'task': 'train',
         'boosting_type': 'gbdt',
-        'objective': 'lambdarank',
-        'metric': 'ndcg',   # for lambdarank
-        'ndcg_eval_at': [1,2,3],  # for lambdarank
-        'label_gain': list(range(0, np.max( np.array( data["answer"], dtype = np.int32 ) ) + 1)),
-        'max_position': int( max_pos ),  # for lambdarank
+        'objective': 'regression_l2',
+        'metric': 'l2',
         'early_stopping_rounds': 30,
-        'learning_rate': 0.05,
-        'num_iteration': 300,
+        'learning_rate': params["learning_rate"],
+        'num_iteration': params["num_iteration"],
         'min_data_in_bin': 1,
-        'max_depth': 200,
-        'num_leaves': 175,
-        'min_data_in_leaf': 25,
+        'max_depth': params["max_depth"],
+        'num_leaves': params["num_leaves"],
+        'min_data_in_leaf': params["min_data_in_leaf"],
+        'lambda_l1': params["lambda_l1"],
+        'lambda_l2': params["lambda_l2"]
     }
 
-    bst = lgb.train( params = lgbm_params,
+    model = lgb.train( params = lgbm_params,
                      train_set = lgb_train,     
                      valid_sets = [lgb_train, lgb_vaild ],
                      verbose_eval = 10,
                      num_boost_round = 5000 )
-    
-    dm.pickle_upload( lib.name.model_name(), bst )
-        
-    return bst
-"""
+
+    score_check( model, upload = True )
+    dm.pickle_upload( lib.name.model_name(), model )
 
 def standardization( data ):
     ave = sum( data ) / len( data )
@@ -131,9 +139,8 @@ def data_check( data ):
 
     return result
 
-def score_check( simu_data, model ):
+def score_check( model, upload = False ):
     score1 = 0
-    score2 = 0
     count = 0
     simu_predict_data = {}
     predict_use_data = []
@@ -187,81 +194,28 @@ def score_check( simu_data, model ):
 
             if year in lib.test_years:
                 score1 += math.pow( predict_score - check_answer, 2 )
-                score2 += math.pow( max( int( check_data[i]["score"] + 0.5 ), 1 ) - check_answer, 2 )
                 count += 1            
             
     score1 /= count
     score1 = math.sqrt( score1 )
     print( "score1: {}".format( score1 ) )
 
-    score2 /= count
-    score2 = math.sqrt( score2 )
-    print( "score2: {}".format( score2 ) )
+    if upload:
+        dm.pickle_upload( "predict_first_passing_rank.pickle", simu_predict_data )
 
-    dm.pickle_upload( "predict_first_passing_rank.pickle", simu_predict_data )
-    
-"""    
-def score_check( simu_data, model ):
-    score = 0
-    count = 0
-    simu_predict_data = {}
-    
-    for race_id in simu_data.keys():
-        predict_data = []
-        simu_predict_data[race_id] = {}
-        
-        for horce_id in simu_data[race_id].keys():
-            predict_score = model.predict( np.array( [ simu_data[race_id][horce_id]["data"] ] ) )[0]
-            first_passing_rank = simu_data[race_id][horce_id]["answer"]["first_passing_rank"]
-            predict_data.append( { "score": predict_score, "rank": first_passing_rank, "horce_id": horce_id } )
+    return score1
 
-        predict_data = sorted( predict_data, key = lambda x: x["score"] )
-        #print( predict_data )
-        for i in range( 0, len( predict_data ) ):
-            predict_rank = i + 1
-            horce_id = predict_data[i]["horce_id"]
-            score += math.pow( predict_rank - predict_data[i]["rank"], 2 )
-            count += 1
-            simu_predict_data[race_id][horce_id] = predict_rank
+def main( arg_data, arg_simu_data ):
+    global data
+    global simu_data
+    simu_data = arg_simu_data
+    data = data_check( arg_data )
 
-    score /= count
-    score = math.sqrt( score )
-    print( "score: {}".format( score ) )
-    dm.pickle_upload( "predict_first_passing_rank.pickle", simu_predict_data )
-"""
+    study = optuna.create_study()
+    study.optimize(objective, n_trials=100)
+    print( study.best_params )
 
-def importance_check( model ):
-    result = []
-    importance_data = model.feature_importance()
-    f = open( "common/rank_score_data.txt" )
-    all_data = f.readlines()
+    best_model_create( study.best_params )
+    f = open( "best_params.txt", "w" )
+    f.write( str( study.best_params) )
     f.close()
-    c = 0
-
-    for i in range( 0, len( all_data ) ):
-        str_data = all_data[i].replace( "\n", "" )
-
-        if "False" in str_data:
-            continue
-
-        result.append( { "key": str_data, "score": importance_data[c] } )
-        c += 1
-
-    result = sorted( result, key = lambda x: x["score"], reverse= True )
-
-    for i in range( 0, len( result ) ):
-        print( "{}: {}".format( result[i]["key"], result[i]["score"] ) )
-
-def main( data, simu_data, learn = True ):
-    learn_data = data_check( data )
-
-    if learn:
-        model = lg_main( learn_data )
-        importance_check( model )
-    else:
-        model = dm.pickle_load( lib.name.model_name() )
-        
-    score_check( simu_data, model )
-    #score_check( learn_data["test_teacher"], learn_data["test_answer"], model )
-
-    return model
