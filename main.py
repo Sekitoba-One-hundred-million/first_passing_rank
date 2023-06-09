@@ -59,7 +59,7 @@ def main():
             for r in range( 0, len( learn_data["teacher"][i] ) ):
                 learn_data["teacher"][i][r] = data_remove( learn_data["teacher"][i][r], remove_list )
 
-        if not p_check and not u_check:
+        if not p_check:
             learn.main( learn_data, simu_data, learn = ( l_check or u_check ) )
         else:
             optuna_learn.main( learn_data, simu_data )
