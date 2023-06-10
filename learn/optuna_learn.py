@@ -16,13 +16,13 @@ def objective( trial ):
     lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
     lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
 
-    learning_rate = trial.suggest_float( 'learning_rate', 0.01, 0.05 )
+    learning_rate = trial.suggest_float( 'learning_rate', 0.005, 0.03 )
     num_leaves =  trial.suggest_int( "num_leaves", 50, 300 )
     max_depth = trial.suggest_int( "max_depth", 200, 500 )
     num_iteration = trial.suggest_int( "num_iteration", 5000, 15000 )
     min_data_in_leaf = trial.suggest_int( "min_data_in_leaf", 1, 50 )
-    lambda_l1 = trial.suggest_float( "lambda_l1", 0, 0.1 )
-    lambda_l2 = trial.suggest_float( "lambda_l2", 0, 0.1 )
+    lambda_l1 = trial.suggest_float( "lambda_l1", 0, 1 )
+    lambda_l2 = trial.suggest_float( "lambda_l2", 0, 1 )
 
     lgbm_params =  {
         #'task': 'train',
