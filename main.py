@@ -29,8 +29,7 @@ def main():
     import sekitoba_data_manage as dm
     import sekitoba_library as lib
     from data_analyze import data_create
-    from learn import learn
-    from learn import optuna_learn
+    import learn
     lib.name.set_name( "first_passing_rank" )
 
     lib.log.set_write( False )
@@ -59,10 +58,10 @@ def main():
             for r in range( 0, len( learn_data["teacher"][i] ) ):
                 learn_data["teacher"][i][r] = data_remove( learn_data["teacher"][i][r], remove_list )
 
-        if not p_check:
+        if l_check:
             learn.main( learn_data, simu_data, learn = ( l_check or u_check ) )
-        else:
-            optuna_learn.main( learn_data, simu_data )
+        elif p_check:
+            learn.optuna_main( learn_data, simu_data )
             
     MPI.Finalize()        
     
