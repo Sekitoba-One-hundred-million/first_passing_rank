@@ -1,5 +1,6 @@
 import os
 import math
+import json
 import numpy as np
 import lightgbm as lgb
 from tqdm import tqdm
@@ -24,7 +25,7 @@ def lg_main( data ):
         params["min_data_in_leaf"] = 25
         params["lambda_l1"] = 0
         params["lambda_l2"] = 0
-    
+
     lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
     lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
     
@@ -39,7 +40,7 @@ def lg_main( data ):
         'min_data_in_bin': 1,
         'max_depth': params["max_depth"],
         'num_leaves': params["num_leaves"],
-        'min_data_in_leaf': 1,
+        'min_data_in_leaf': params["min_data_in_leaf"],
         'lambda_l1': params["lambda_l1"],
         'lambda_l2': params["lambda_l2"]
     }

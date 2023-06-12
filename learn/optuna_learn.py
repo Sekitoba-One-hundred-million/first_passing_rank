@@ -1,5 +1,6 @@
-import optuna
 import math
+import json
+import optuna
 import numpy as np
 import lightgbm as lgb
 from tqdm import tqdm
@@ -59,7 +60,7 @@ def optuna_main( arg_data, arg_simu_data ):
     study = optuna.create_study()
     study.optimize(objective, n_trials=100)
     print( study.best_params )
-
+    
     f = open( "best_params.json", "w" )
     json.dump( study.best_params, f )
     f.close()
