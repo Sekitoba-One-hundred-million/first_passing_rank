@@ -74,8 +74,10 @@ def importance_check( model ):
 
     result = sorted( result, key = lambda x: x["score"], reverse= True )
 
+    wf = open( "importance_data.txt", "w" )
+
     for i in range( 0, len( result ) ):
-        print( "{}: {}".format( result[i]["key"], result[i]["score"] ) )
+        wf.write( "{}: {}\n".format( result[i]["key"], result[i]["score"] ) )        
 
 def main( data, simu_data, learn = True ):
     learn_data = data_adjustment.data_check( data )

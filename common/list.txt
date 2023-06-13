@@ -141,7 +141,6 @@ rank_score_odds
 speed_index
 speed_index_index
 std_race_ave_horce_body
-train_score
 trainer_rank
 two_popular_limb
 two_popular_odds
@@ -244,3 +243,6 @@ ave_up_rate
 ave_past_ave_horce_body
 ave_past_max_horce_body
 ave_past_min_horce_body
+predict_train_score
+predict_train_score_index
+predict_train_score_stand
