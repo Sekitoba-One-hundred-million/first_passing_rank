@@ -246,3 +246,4 @@ ave_past_min_horce_body
 predict_train_score
 predict_train_score_index
 predict_train_score_stand
+predict_pace

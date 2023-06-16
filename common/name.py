@@ -248,3 +248,4 @@ class Name:
         self.predict_train_score = "predict_train_score"
         self.predict_train_score_index = "predict_train_score_index"
         self.predict_train_score_stand = "predict_train_score_stand"
+        self.predict_pace = "predict_pace"

@@ -46,6 +46,7 @@ dm.dl.file_set( "trainer_judgment_rate_data.pickle" )
 dm.dl.file_set( "first_passing_true_skill_data.pickle" )
 dm.dl.file_set( "last_passing_true_skill_data.pickle" )
 dm.dl.file_set( "predict_train_score.pickle" )
+dm.dl.file_set( "predict_pace_data.pickle" )
 
 class OnceData:
     def __init__( self ):
@@ -65,7 +66,6 @@ class OnceData:
         self.waku_three_rate_data = dm.dl.data_get( "waku_three_rate_data.pickle" )
         self.wrap_data = dm.dl.data_get( "wrap_data.pickle" )
         self.corner_horce_body = dm.dl.data_get( "corner_horce_body.pickle" )
-        #self.first_corner_rank = dm.dl.data_get( "first_corner_rank.pickle" )
         self.first_passing_true_skill_data = dm.dl.data_get( "first_passing_true_skill_data.pickle" )
         self.last_passing_true_skill_data = dm.dl.data_get( "last_passing_true_skill_data.pickle" )
         self.jockey_judgment_data = dm.dl.data_get( "jockey_judgment_data.pickle" )
@@ -73,6 +73,7 @@ class OnceData:
         self.trainer_judgment_data = dm.dl.data_get( "trainer_judgment_data.pickle" )
         self.trainer_judgment_rate_data = dm.dl.data_get( "trainer_judgment_rate_data.pickle" )
         self.predict_train_score = dm.dl.data_get( "predict_train_score.pickle" )
+        self.predict_pace_data = dm.dl.data_get( "predict_pace_data.pickle" )
         
         self.race_high_level = RaceHighLevel()
         self.race_type = RaceType()
@@ -161,6 +162,11 @@ class OnceData:
         if not race_id in self.corner_horce_body:
             return
 
+        predict_pace = 0
+
+        if race_id in self.predict_pace_data:
+            predict_pace = self.predict_pace_data[race_id]
+        
         current_horce_body = self.corner_horce_body[race_id]
         min_corner_key = min( self.corner_horce_body[race_id] )
         key_race_money_class = str( int( lib.money_class_get( self.race_money_data[race_id] ) ) )
@@ -851,6 +857,7 @@ class OnceData:
             t_instance[data_name.predict_train_score] = predict_train_score
             t_instance[data_name.predict_train_score_index] = predict_train_score_index
             t_instance[data_name.predict_train_score_stand] = stand_predict_train_score[count]
+            t_instance[data_name.predict_pace] = predict_pace
 
             count += 1
             t_list = self.data_list_create( t_instance )
