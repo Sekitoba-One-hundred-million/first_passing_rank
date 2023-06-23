@@ -47,6 +47,7 @@ dm.dl.file_set( "first_passing_true_skill_data.pickle" )
 dm.dl.file_set( "last_passing_true_skill_data.pickle" )
 dm.dl.file_set( "predict_train_score.pickle" )
 dm.dl.file_set( "predict_pace_data.pickle" )
+dm.dl.file_set( "first_up3_halon.pickle" )
 
 class OnceData:
     def __init__( self ):
@@ -74,6 +75,7 @@ class OnceData:
         self.trainer_judgment_rate_data = dm.dl.data_get( "trainer_judgment_rate_data.pickle" )
         self.predict_train_score = dm.dl.data_get( "predict_train_score.pickle" )
         self.predict_pace_data = dm.dl.data_get( "predict_pace_data.pickle" )
+        self.first_up3_halon = dm.dl.data_get( "first_up3_halon.pickle" )
         
         self.race_high_level = RaceHighLevel()
         self.race_type = RaceType()
@@ -200,6 +202,8 @@ class OnceData:
         current_race_data[data_name.past_ave_horce_body] = []
         current_race_data[data_name.past_std_horce_body] = []
         current_race_data[data_name.predict_train_score] = []
+        current_race_data[data_name.first_up3_halon_ave] = []
+        current_race_data[data_name.first_up3_halon_min] = []
         escape_limb1_count = 0
         escape_limb2_count = 0
         one_popular_limb = -1
@@ -344,6 +348,17 @@ class OnceData:
             if race_id in self.predict_train_score and horce_id in self.predict_train_score[race_id]:
                 train_score = self.predict_train_score[race_id][horce_id]
 
+
+            horce_num = int( cd.horce_number() )
+            first_up3_halon_ave = -1
+            first_up3_halon_min = -1
+
+            if race_id in self.first_up3_halon and \
+              horce_num in self.first_up3_halon[race_id] and \
+              not len( self.first_up3_halon[race_id][horce_num] ) == 0:
+                first_up3_halon_ave = sum( self.first_up3_halon[race_id][horce_num] ) / len( self.first_up3_halon[race_id][horce_num] )
+                first_up3_halon_min = min( self.first_up3_halon[race_id][horce_num] )
+
             current_year = cd.year()
             horce_birth_day = int( horce_id[0:4] )
             age = current_year - horce_birth_day
@@ -371,6 +386,8 @@ class OnceData:
             current_race_data[data_name.past_std_horce_body].append( past_std_horce_body )
             current_race_data[data_name.omega].append( omega )
             current_race_data[data_name.predict_train_score].append( train_score )
+            current_race_data[data_name.first_up3_halon_ave].append( first_up3_halon_ave )
+            current_race_data[data_name.first_up3_halon_min].append( first_up3_halon_min )
 
             for judge_key in judgement_data.keys():
                 lib.dic_append( current_race_data, judge_key, [] )
@@ -427,6 +444,9 @@ class OnceData:
         stand_jockey_judgment_baba = lib.standardization( current_race_data[data_name.jockey_judgment_baba] )
         stand_jockey_judgment_place = lib.standardization( current_race_data[data_name.jockey_judgment_place] )
         stand_predict_train_score = lib.standardization( current_race_data[data_name.predict_train_score] )
+
+        first_up3_halon_ave_stand = lib.standardization( current_race_data[data_name.first_up3_halon_ave] )
+        first_up3_halon_min_stand = lib.standardization( current_race_data[data_name.first_up3_halon_min] )
 
         std_race_ave_horce_body = stdev( current_race_data[data_name.past_ave_horce_body] )
         std_race_horce_true_skill = stdev( current_race_data[data_name.horce_true_skill] )
@@ -674,6 +694,12 @@ class OnceData:
             t_instance[data_name.escape_limb1_count] = escape_limb1_count
             t_instance[data_name.escape_limb2_count] = escape_limb2_count
             t_instance[data_name.escape_within_rank] = escape_within_rank
+
+            t_instance[data_name.first_up3_halon_ave] = current_race_data[data_name.first_up3_halon_ave][count]
+            t_instance[data_name.first_up3_halon_ave_stand] = first_up3_halon_ave_stand[count]
+            t_instance[data_name.first_up3_halon_min] = current_race_data[data_name.first_up3_halon_min][count]
+            t_instance[data_name.first_up3_halon_min_stand] = first_up3_halon_min_stand[count]
+            
             t_instance[data_name.horce_num] = cd.horce_number()
             t_instance[data_name.horce_sex] = horce_sex
             t_instance[data_name.horce_true_skill] = horce_true_skill
@@ -699,8 +725,7 @@ class OnceData:
             t_instance[data_name.jockey_judgment_dist] = judgement_data[data_name.jockey_judgment_dist]
             t_instance[data_name.jockey_judgment_kind] = judgement_data[data_name.jockey_judgment_kind]
             t_instance[data_name.jockey_judgment_baba] = judgement_data[data_name.jockey_judgment_baba]
-            t_instance[data_name.jockey_judgment_place] = judgement_data[data_name.jockey_judgment_place]
-            
+            t_instance[data_name.jockey_judgment_place] = judgement_data[data_name.jockey_judgment_place]            
             t_instance[data_name.jockey_judgment_limb_index] = sort_race_data[data_name.jockey_judgment_limb_index].index( judgement_data[data_name.jockey_judgment_limb] )
             t_instance[data_name.jockey_judgment_popular_index] = sort_race_data[data_name.jockey_judgment_popular_index].index( judgement_data[data_name.jockey_judgment_popular] )
             t_instance[data_name.jockey_judgment_flame_num_index] = sort_race_data[data_name.jockey_judgment_flame_num_index].index( judgement_data[data_name.jockey_judgment_flame_num] )
@@ -730,7 +755,6 @@ class OnceData:
             t_instance[data_name.jockey_judgment_rate_place_0] = judgement_data[data_name.jockey_judgment_rate_place_0]
             t_instance[data_name.jockey_judgment_rate_place_1] = judgement_data[data_name.jockey_judgment_rate_place_1]
             t_instance[data_name.jockey_judgment_rate_place_2] = judgement_data[data_name.jockey_judgment_rate_place_2]
-
             t_instance[data_name.trainer_judgment_limb] = judgement_data[data_name.trainer_judgment_limb]
             t_instance[data_name.trainer_judgment_popular] = judgement_data[data_name.trainer_judgment_popular]
             t_instance[data_name.trainer_judgment_flame_num] = judgement_data[data_name.trainer_judgment_flame_num]
