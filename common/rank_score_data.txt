@@ -14,6 +14,9 @@ before_speed
 burden_weight
 corner_diff_rank_ave
 corner_diff_rank_ave_index
+corner_true_skill
+corner_true_skill_index
+corner_true_skill_stand
 diff_load_weight
 dist_kind
 dist_kind_count

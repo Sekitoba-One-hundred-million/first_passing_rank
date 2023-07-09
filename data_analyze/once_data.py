@@ -188,6 +188,7 @@ class OnceData:
         current_race_data[data_name.trainer_first_passing_true_skill] = []
         current_race_data[data_name.horce_last_passing_true_skill] = []
         current_race_data[data_name.jockey_last_passing_true_skill] = []
+        current_race_data[data_name.corner_true_skill] = []
         current_race_data[data_name.corner_diff_rank_ave] = []
         current_race_data[data_name.speed_index] = []
         current_race_data[data_name.up_rate] = []
@@ -293,7 +294,7 @@ class OnceData:
             if race_id in self.last_passing_true_skill_data["jockey"] and \
               jockey_id in self.last_passing_true_skill_data["jockey"][race_id]:
                 jockey_last_passing_true_skill = self.last_passing_true_skill_data["jockey"][race_id][jockey_id]
-                
+
             try:
                 omega = self.omega_index_data[race_id][int(cd.horce_number()-1)]
             except:
@@ -347,7 +348,6 @@ class OnceData:
 
             if race_id in self.predict_train_score and horce_id in self.predict_train_score[race_id]:
                 train_score = self.predict_train_score[race_id][horce_id]
-
 
             horce_num = int( cd.horce_number() )
             first_up3_halon_ave = -1
@@ -447,7 +447,6 @@ class OnceData:
 
         first_up3_halon_ave_stand = lib.standardization( current_race_data[data_name.first_up3_halon_ave] )
         first_up3_halon_min_stand = lib.standardization( current_race_data[data_name.first_up3_halon_min] )
-
         std_race_ave_horce_body = stdev( current_race_data[data_name.past_ave_horce_body] )
         std_race_horce_true_skill = stdev( current_race_data[data_name.horce_true_skill] )
         std_race_jockey_true_skill = stdev( current_race_data[data_name.jockey_true_skill] )
@@ -708,6 +707,7 @@ class OnceData:
             t_instance[data_name.jockey_true_skill_index] = jockey_true_skill_index
             t_instance[data_name.trainer_true_skill] = trainer_true_skill
             t_instance[data_name.trainer_true_skill_index] = trainer_true_skill_index
+
             t_instance[data_name.horce_first_passing_true_skill] = horce_first_passing_true_skill
             t_instance[data_name.horce_first_passing_true_skill_index] = horce_first_passing_true_skill_index
             t_instance[data_name.jockey_first_passing_true_skill] = jockey_first_passing_true_skill
