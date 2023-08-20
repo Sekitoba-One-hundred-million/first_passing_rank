@@ -35,7 +35,7 @@ for file_name in $file_list; do
     ARR=(${file_name//./ })
     name=${ARR[0]}
     echo "$base$name = \"$name\"" >> $write_file_name
-    done
+done
 
 cp -r $dir data_analyze/
 cp -r $dir learn/

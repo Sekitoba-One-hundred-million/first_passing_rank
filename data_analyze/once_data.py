@@ -89,6 +89,7 @@ class OnceData:
         f = open( "common/rank_score_data.txt", "w" )
 
         for data_name in self.write_data_list:
+            print( data_name )
             f.write( data_name + "\n" )
 
         f.close()
