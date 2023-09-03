@@ -23,12 +23,9 @@ def data_check( data ):
             result["query"].append( query )
 
         n = int( query / 3 )
-        #corner_horce_body_list = []
 
-        #for r in range( 0, query ):
-        #    corner_horce_body_list.append( data["horce_body"][i][r] )
-
-        #corner_horce_body_list = lib.standardization( corner_horce_body_list )
+        if n == 0:
+            continue
 
         for r in range( 0, query ):
             current_data = data["teacher"][i][r]
