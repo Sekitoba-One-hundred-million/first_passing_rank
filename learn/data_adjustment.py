@@ -25,7 +25,7 @@ def data_check( data ):
         n = int( query / 3 )
 
         if n == 0:
-            continue
+            n = 1
 
         for r in range( 0, query ):
             current_data = data["teacher"][i][r]
