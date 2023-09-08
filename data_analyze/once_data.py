@@ -432,7 +432,6 @@ class OnceData:
         std_past_max_horce_body = stdev( current_race_data[data_name.past_max_horce_body] )
         std_past_min_horce_body = stdev( current_race_data[data_name.past_min_horce_body] )
 
-        min_corner = int( min_corner_key )
         min_race_horce_true_skill = min( current_race_data[data_name.horce_true_skill] )
         min_race_jockey_true_skill = min( current_race_data[data_name.jockey_true_skill] )
         min_race_trainer_true_skill = min( current_race_data[data_name.trainer_true_skill] )        
@@ -763,7 +762,6 @@ class OnceData:
             t_instance[data_name.max_race_trainer_true_skill] = max_race_trainer_true_skill - trainer_true_skill
             t_instance[data_name.max_speed_index] = max_speed_index - speed_index
             t_instance[data_name.max_up_rate] = max_up_rate - up_rate
-            t_instance[data_name.min_corner] = min_corner
             t_instance[data_name.min_past_ave_horce_body] = min_past_ave_horce_body - past_ave_horce_body
             t_instance[data_name.min_past_max_horce_body] = min_past_max_horce_body - past_min_horce_body
             t_instance[data_name.min_past_min_horce_body] = min_past_min_horce_body - past_max_horce_body
