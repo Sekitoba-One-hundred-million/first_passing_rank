@@ -419,7 +419,6 @@ class OnceData:
 
         first_up3_halon_ave_stand = lib.standardization( current_race_data[data_name.first_up3_halon_ave] )
         first_up3_halon_min_stand = lib.standardization( current_race_data[data_name.first_up3_halon_min] )
-        std_race_ave_horce_body = stdev( current_race_data[data_name.past_ave_horce_body] )
         std_race_horce_true_skill = stdev( current_race_data[data_name.horce_true_skill] )
         std_race_jockey_true_skill = stdev( current_race_data[data_name.jockey_true_skill] )
         std_race_trainer_true_skill = stdev( current_race_data[data_name.trainer_true_skill] )
@@ -803,7 +802,6 @@ class OnceData:
             t_instance[data_name.std_past_ave_horce_body] = std_past_ave_horce_body
             t_instance[data_name.std_past_max_horce_body] = std_past_max_horce_body
             t_instance[data_name.std_past_min_horce_body] = std_past_min_horce_body
-            t_instance[data_name.std_race_ave_horce_body] = std_race_ave_horce_body
             t_instance[data_name.std_race_horce_first_passing_true_skill] = std_race_horce_first_passing_true_skill
             t_instance[data_name.std_race_horce_true_skill] = std_race_horce_true_skill
             t_instance[data_name.std_race_jockey_first_passing_true_skill] = std_race_jockey_first_passing_true_skill
