@@ -385,13 +385,13 @@ class OnceData:
         sort_race_data[data_name.up_rate_index] = sorted( current_race_data[data_name.up_rate], reverse = True )
         sort_race_data[data_name.past_ave_first_horce_body_index] = sorted( current_race_data[data_name.past_ave_first_horce_body], reverse = True )
         sort_race_data[data_name.past_min_first_horce_body_index] = sorted( current_race_data[data_name.past_min_first_horce_body], reverse = True )
-        sort_race_data[data_name.jockey_judgment_limb_index] = sorted( current_race_data[data_name.jockey_judgment_limb] )
-        sort_race_data[data_name.jockey_judgment_popular_index] = sorted( current_race_data[data_name.jockey_judgment_popular] )
-        sort_race_data[data_name.jockey_judgment_flame_num_index] = sorted( current_race_data[data_name.jockey_judgment_flame_num] )
-        sort_race_data[data_name.jockey_judgment_dist_index] = sorted( current_race_data[data_name.jockey_judgment_dist] )
-        sort_race_data[data_name.jockey_judgment_kind_index] = sorted( current_race_data[data_name.jockey_judgment_kind] )
-        sort_race_data[data_name.jockey_judgment_baba_index] = sorted( current_race_data[data_name.jockey_judgment_baba] )
-        sort_race_data[data_name.jockey_judgment_place_index] = sorted( current_race_data[data_name.jockey_judgment_place] )
+        sort_race_data[data_name.jockey_judgment_limb_index] = sorted( current_race_data[data_name.jockey_judgment_limb], reverse = True )
+        sort_race_data[data_name.jockey_judgment_popular_index] = sorted( current_race_data[data_name.jockey_judgment_popular], reverse = True )
+        sort_race_data[data_name.jockey_judgment_flame_num_index] = sorted( current_race_data[data_name.jockey_judgment_flame_num], reverse = True )
+        sort_race_data[data_name.jockey_judgment_dist_index] = sorted( current_race_data[data_name.jockey_judgment_dist], reverse = True )
+        sort_race_data[data_name.jockey_judgment_kind_index] = sorted( current_race_data[data_name.jockey_judgment_kind], reverse = True )
+        sort_race_data[data_name.jockey_judgment_baba_index] = sorted( current_race_data[data_name.jockey_judgment_baba], reverse = True )
+        sort_race_data[data_name.jockey_judgment_place_index] = sorted( current_race_data[data_name.jockey_judgment_place], reverse = True )
         sort_race_data[data_name.predict_train_score_index] = sorted( current_race_data[data_name.predict_train_score], reverse = True )
         
         N = len( current_race_data[data_name.horce_true_skill] )
@@ -498,12 +498,12 @@ class OnceData:
 
             answer_corner_horce_body = current_horce_body[min_corner_key][key_horce_num]
 
-            before_speed_score = -1
-            before_diff_score = 1000
+            before_speed_score = -1000
+            before_diff_score = -1000
             before_id_weight_score = 1000
-            before_popular = -1
-            before_passing_list = [ -1, -1, -1, -1 ]
-            before_rank = -1
+            before_popular = -1000
+            before_passing_list = [ -1000, -1000, -1000, -1000 ]
+            before_rank = -1000
             up3_standard_value = -1000
             diff_load_weight = -1000
             before_pace_up_diff = -1000
@@ -650,8 +650,8 @@ class OnceData:
             t_instance[data_name.ave_race_horce_true_skill] = ave_race_horce_true_skill - horce_true_skill
             t_instance[data_name.ave_race_jockey_true_skill] = ave_race_jockey_true_skill - jockey_true_skill
             t_instance[data_name.ave_race_trainer_true_skill] = ave_race_trainer_true_skill - trainer_true_skill
-            t_instance[data_name.ave_race_horce_first_passing_true_skill] = ave_race_horce_first_passing_true_skill - horce_true_skill
-            t_instance[data_name.ave_race_jockey_first_passing_true_skill] = ave_race_jockey_first_passing_true_skill - jockey_true_skill
+            t_instance[data_name.ave_race_horce_first_passing_true_skill] = ave_race_horce_first_passing_true_skill - horce_first_passing_true_skill
+            t_instance[data_name.ave_race_jockey_first_passing_true_skill] = ave_race_jockey_first_passing_true_skill - jockey_first_passing_true_skill
             t_instance[data_name.ave_race_trainer_first_passing_true_skill] = ave_race_trainer_first_passing_true_skill - trainer_first_passing_true_skill
             t_instance[data_name.ave_speed_index] = ave_speed_index - speed_index
             t_instance[data_name.ave_up_rate] = ave_up_rate - up_rate
