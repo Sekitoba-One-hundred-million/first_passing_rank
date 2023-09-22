@@ -500,7 +500,7 @@ class OnceData:
 
             before_speed_score = -1000
             before_diff_score = -1000
-            before_id_weight_score = 1000
+            before_id_weight_score = -1000
             before_popular = -1000
             before_passing_list = [ -1000, -1000, -1000, -1000 ]
             before_rank = -1000
