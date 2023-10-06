@@ -37,6 +37,12 @@ dist_kind_count
 escape_limb1_count
 escape_limb2_count
 escape_within_rank
+first_result_rank_diff
+first_result_rank_diff_index
+first_result_rank_diff_stand
+last_result_rank_diff
+last_result_rank_diff_index
+last_result_rank_diff_stand
 first_up3_halon_ave
 first_up3_halon_ave_stand
 first_up3_halon_min
