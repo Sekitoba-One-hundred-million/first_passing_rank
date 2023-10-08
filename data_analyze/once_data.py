@@ -184,6 +184,11 @@ class OnceData:
         current_race_data[data_name.first_up3_halon_min] = []
         current_race_data[data_name.first_result_rank_diff] = []
         current_race_data[data_name.last_result_rank_diff] = []
+        current_race_data[data_name.best_first_passing_rank] = []
+        current_race_data[data_name.best_second_passing_rank] = []
+        current_race_data[data_name.passing_regression] = []
+        current_race_data[data_name.diff_pace_first_passing] = []
+        current_race_data[data_name.diff_pace_time] = []        
         escape_limb1_count = 0
         escape_limb2_count = 0
         one_popular_limb = -1
@@ -362,6 +367,11 @@ class OnceData:
             current_race_data[data_name.first_up3_halon_min].append( first_up3_halon_min )
             current_race_data[data_name.first_result_rank_diff].append( pd.first_result_rank_diff() )
             current_race_data[data_name.last_result_rank_diff].append( pd.last_result_rank_diff() )
+            current_race_data[data_name.best_first_passing_rank].append( pd.best_first_passing_rank() )
+            current_race_data[data_name.best_second_passing_rank].append( pd.best_second_passing_rank() )
+            current_race_data[data_name.passing_regression].append( pd.passing_regression() )
+            current_race_data[data_name.diff_pace_first_passing].append( pd.diff_pace_first_passing() )
+            current_race_data[data_name.diff_pace_time].append( pd.diff_pace_time() )
             horce_id_list.append( horce_id )
 
             for judge_key in judgement_data.keys():
@@ -396,8 +406,11 @@ class OnceData:
         current_race_data[data_name.predict_train_score_index] = sorted( current_race_data[data_name.predict_train_score], reverse = True )
         current_race_data[data_name.first_result_rank_diff_index] = sorted( current_race_data[data_name.first_result_rank_diff], reverse = True )
         current_race_data[data_name.last_result_rank_diff_index] = sorted( current_race_data[data_name.last_result_rank_diff], reverse = True )
-        
-        N = len( current_race_data[data_name.horce_true_skill] )
+        current_race_data[data_name.best_first_passing_rank_index] = sorted( current_race_data[data_name.best_first_passing_rank], reverse = True )
+        current_race_data[data_name.best_second_passing_rank_index] = sorted( current_race_data[data_name.best_second_passing_rank], reverse = True )
+        current_race_data[data_name.passing_regression_index] = sorted( current_race_data[data_name.passing_regression], reverse = True )
+        current_race_data[data_name.diff_pace_first_passing_index] = sorted( current_race_data[data_name.diff_pace_first_passing], reverse = True )
+        current_race_data[data_name.diff_pace_time_index] = sorted( current_race_data[data_name.diff_pace_time], reverse = True )
 
         current_race_data[data_name.past_ave_first_horce_body_stand] = lib.standardization( current_race_data[data_name.past_ave_first_horce_body] )
         current_race_data[data_name.horce_true_skill_stand] = lib.standardization( current_race_data[data_name.horce_true_skill] )
@@ -423,6 +436,11 @@ class OnceData:
         current_race_data[data_name.first_up3_halon_min_stand] = lib.standardization( current_race_data[data_name.first_up3_halon_min] )
         current_race_data[data_name.first_result_rank_diff_stand] = lib.standardization( current_race_data[data_name.first_result_rank_diff] )
         current_race_data[data_name.last_result_rank_diff_stand] = lib.standardization( current_race_data[data_name.last_result_rank_diff] )
+        current_race_data[data_name.best_first_passing_rank_stand] = lib.standardization( current_race_data[data_name.best_first_passing_rank] )
+        current_race_data[data_name.best_second_passing_rank_stand] = lib.standardization( current_race_data[data_name.best_second_passing_rank] )
+        current_race_data[data_name.passing_regression_stand] = lib.standardization( current_race_data[data_name.passing_regression] )
+        current_race_data[data_name.diff_pace_first_passing_stand] = lib.standardization( current_race_data[data_name.diff_pace_first_passing] )
+        current_race_data[data_name.diff_pace_time_stand] = lib.standardization( current_race_data[data_name.diff_pace_time] )
         
         std_race_horce_true_skill = stdev( current_race_data[data_name.horce_true_skill] )
         std_race_jockey_true_skill = stdev( current_race_data[data_name.jockey_true_skill] )
@@ -462,6 +480,7 @@ class OnceData:
         max_past_max_first_horce_body = max( current_race_data[data_name.past_max_first_horce_body] )
         max_past_min_first_horce_body = max( current_race_data[data_name.past_min_first_horce_body] )
 
+        N = len( current_race_data[data_name.horce_true_skill] )
         ave_race_horce_true_skill = sum( current_race_data[data_name.horce_true_skill] ) / N 
         ave_race_jockey_true_skill = sum( current_race_data[data_name.jockey_true_skill] ) / N
         ave_race_trainer_true_skill = sum( current_race_data[data_name.trainer_true_skill] ) / N 
@@ -546,11 +565,7 @@ class OnceData:
             ave_first_passing_rank = pd.first_passing_rank()
             best_weight = pd.best_weight()
             average_speed = pd.average_speed()
-            best_first_passing_rank = pd.best_first_passing_rank()
-            best_second_passing_rank = pd.best_second_passing_rank()
             before_continue_not_three_rank = pd.before_continue_not_three_rank()
-            diff_pace_time = pd.diff_pace_time()
-            diff_pace_first_passing = pd.diff_pace_first_passing()
             
             try:
                 before_last_passing_rank = int( before_passing_list[-1] )
@@ -624,8 +639,14 @@ class OnceData:
             t_instance[data_name.before_popular] = before_popular
             t_instance[data_name.before_rank] = before_rank
             t_instance[data_name.before_speed] = before_speed_score
-            t_instance[data_name.best_first_passing_rank] = best_first_passing_rank
-            t_instance[data_name.best_second_passing_rank] = best_second_passing_rank
+            t_instance[data_name.best_first_passing_rank] = current_race_data[data_name.best_first_passing_rank][count]
+            t_instance[data_name.best_first_passing_rank_index] = \
+              current_race_data[data_name.best_first_passing_rank_index].index( current_race_data[data_name.best_first_passing_rank][count] )
+            t_instance[data_name.best_first_passing_rank_stand] = current_race_data[data_name.best_first_passing_rank_stand][count]
+            t_instance[data_name.best_second_passing_rank] = current_race_data[data_name.best_second_passing_rank][count]
+            t_instance[data_name.best_second_passing_rank_index] = \
+              current_race_data[data_name.best_second_passing_rank_index].index( current_race_data[data_name.best_second_passing_rank][count] )
+            t_instance[data_name.best_second_passing_rank_stand] = current_race_data[data_name.best_second_passing_rank_stand][count]
             t_instance[data_name.best_weight] = best_weight
             t_instance[data_name.burden_weight] = burden_weight_score
             t_instance[data_name.corner_diff_rank_ave] = current_race_data[data_name.corner_diff_rank_ave][count]
@@ -633,8 +654,14 @@ class OnceData:
               current_race_data[data_name.corner_diff_rank_ave_index].index(
                   current_race_data[data_name.corner_diff_rank_ave][count] )
             t_instance[data_name.diff_load_weight] = diff_load_weight
-            t_instance[data_name.diff_pace_time] = diff_pace_time
-            t_instance[data_name.diff_pace_first_passing] = diff_pace_first_passing
+            t_instance[data_name.diff_pace_time] = current_race_data[data_name.diff_pace_time][count]
+            t_instance[data_name.diff_pace_time_index] = \
+              current_race_data[data_name.diff_pace_time_index].index( current_race_data[data_name.diff_pace_time][count] )
+            t_instance[data_name.diff_pace_time_stand] = current_race_data[data_name.diff_pace_time_stand][count]
+            t_instance[data_name.diff_pace_first_passing] = current_race_data[data_name.diff_pace_first_passing][count]
+            t_instance[data_name.diff_pace_first_passing_index] = \
+              current_race_data[data_name.diff_pace_first_passing_index].index( current_race_data[data_name.diff_pace_first_passing][count] )
+            t_instance[data_name.diff_pace_first_passing_stand] = current_race_data[data_name.diff_pace_first_passing_stand][count]
             t_instance[data_name.dist_kind] = cd.dist_kind()
             t_instance[data_name.dist_kind_count] = dist_kind_count
             t_instance[data_name.escape_limb1_count] = escape_limb1_count
@@ -782,7 +809,10 @@ class OnceData:
             t_instance[data_name.one_popular_odds] = one_popular_odds
             t_instance[data_name.one_rate] = pd.one_rate()
             t_instance[data_name.pace_up] = pd.pace_up_check()
-            t_instance[data_name.passing_regression] = pd.passing_regression()
+            t_instance[data_name.passing_regression] = current_race_data[data_name.passing_regression][count]
+            t_instance[data_name.passing_regression_index] = \
+              current_race_data[data_name.passing_regression_index].index( current_race_data[data_name.passing_regression][count] )
+            t_instance[data_name.passing_regression_stand] = current_race_data[data_name.passing_regression_stand][count]
             t_instance[data_name.past_ave_first_horce_body] = current_race_data[data_name.past_ave_first_horce_body][count]
             t_instance[data_name.past_ave_first_horce_body_index] = \
               current_race_data[data_name.past_ave_first_horce_body_index].index(

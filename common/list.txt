@@ -28,7 +28,11 @@ before_popular
 before_rank
 before_speed
 best_first_passing_rank
+best_first_passing_rank_index
+best_first_passing_rank_stand
 best_second_passing_rank
+best_second_passing_rank_index
+best_second_passing_rank_stand
 best_weight
 burden_weight
 corner_diff_rank_ave
@@ -39,7 +43,11 @@ corner_true_skill_index
 corner_true_skill_stand
 diff_load_weight
 diff_pace_first_passing
+diff_pace_first_passing_index
+diff_pace_first_passing_stand
 diff_pace_time
+diff_pace_time_index
+diff_pace_time_stand
 dist_kind
 dist_kind_count
 escape_limb1_count
@@ -174,6 +182,8 @@ one_rate
 pace
 pace_up
 passing_regression
+passing_regression_index
+passing_regression_stand
 past_ave_first_horce_body
 past_ave_first_horce_body_index
 past_ave_first_horce_body_stand
