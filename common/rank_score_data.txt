@@ -59,6 +59,7 @@ high_level_score
 horce_first_passing_true_skill
 horce_first_passing_true_skill_index
 horce_first_passing_true_skill_stand
+horce_first_passing_true_skill_devi
 horce_last_passing_true_skill
 horce_last_passing_true_skill_index
 horce_num
@@ -66,9 +67,11 @@ horce_sex
 horce_true_skill
 horce_true_skill_index
 horce_true_skill_stand
+horce_true_skill_devi
 jockey_first_passing_true_skill
 jockey_first_passing_true_skill_index
 jockey_first_passing_true_skill_stand
+jockey_first_passing_true_skill_devi
 jockey_judgment_baba
 jockey_judgment_baba_index
 jockey_judgment_baba_stand
@@ -117,6 +120,7 @@ jockey_rank
 jockey_true_skill
 jockey_true_skill_index
 jockey_true_skill_stand
+jockey_true_skill_devi
 jockey_year_rank
 level_score
 limb
@@ -189,6 +193,7 @@ three_rate
 trainer_first_passing_true_skill
 trainer_first_passing_true_skill_index
 trainer_first_passing_true_skill_stand
+trainer_first_passing_true_skill_devi
 trainer_judgment_baba
 trainer_judgment_dist
 trainer_judgment_flame_num
@@ -200,6 +205,7 @@ trainer_rank
 trainer_true_skill
 trainer_true_skill_index
 trainer_true_skill_stand
+trainer_true_skill_devi
 two_popular_limb
 two_popular_odds
 two_rate
@@ -209,3 +215,7 @@ up_rate_index
 up_rate_stand
 weather
 weight
+max_time_point
+max_time_point_index
+max_time_point_stand
+max_time_point_devi

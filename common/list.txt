@@ -30,9 +30,11 @@ before_speed
 best_first_passing_rank
 best_first_passing_rank_index
 best_first_passing_rank_stand
+best_first_passing_rank_devi
 best_second_passing_rank
 best_second_passing_rank_index
 best_second_passing_rank_stand
+best_second_passing_rank_devi
 best_weight
 burden_weight
 corner_diff_rank_ave
@@ -41,13 +43,16 @@ corner_diff_rank_ave_stand
 corner_true_skill
 corner_true_skill_index
 corner_true_skill_stand
+corner_true_skill_dive
 diff_load_weight
 diff_pace_first_passing
 diff_pace_first_passing_index
 diff_pace_first_passing_stand
+diff_pace_first_passing_devi
 diff_pace_time
 diff_pace_time_index
 diff_pace_time_stand
+diff_pace_time_devi
 dist_kind
 dist_kind_count
 escape_limb1_count
@@ -58,10 +63,12 @@ before_first_result_rank_diff
 first_result_rank_diff
 first_result_rank_diff_index
 first_result_rank_diff_stand
+first_result_rank_diff_devi
 before_last_result_rank_diff
 last_result_rank_diff
 last_result_rank_diff_index
 last_result_rank_diff_stand
+last_result_rank_diff_devi
 first_up3_halon_ave
 first_up3_halon_ave_stand
 first_up3_halon_min
@@ -72,6 +79,7 @@ horce_blood_score
 horce_first_passing_true_skill
 horce_first_passing_true_skill_index
 horce_first_passing_true_skill_stand
+horce_first_passing_true_skill_devi
 horce_last_passing_true_skill
 horce_last_passing_true_skill_index
 horce_num
@@ -79,9 +87,11 @@ horce_sex
 horce_true_skill
 horce_true_skill_index
 horce_true_skill_stand
+horce_true_skill_devi
 jockey_first_passing_true_skill
 jockey_first_passing_true_skill_index
 jockey_first_passing_true_skill_stand
+jockey_first_passing_true_skill_devi
 jockey_judgment_baba
 jockey_judgment_baba_index
 jockey_judgment_baba_stand
@@ -140,6 +150,7 @@ jockey_rank
 jockey_true_skill
 jockey_true_skill_index
 jockey_true_skill_stand
+jockey_true_skill_devi
 jockey_year_rank
 level_score
 level_score_index
@@ -227,6 +238,7 @@ three_rate
 trainer_first_passing_true_skill
 trainer_first_passing_true_skill_index
 trainer_first_passing_true_skill_stand
+trainer_first_passing_true_skill_devi
 trainer_judgment_baba
 trainer_judgment_dist
 trainer_judgment_flame_num
@@ -261,6 +273,7 @@ trainer_rank
 trainer_true_skill
 trainer_true_skill_index
 trainer_true_skill_stand
+trainer_true_skill_devi
 two_popular_limb
 two_popular_odds
 two_rate
@@ -271,3 +284,7 @@ up_rate_stand
 waku_three_rate
 weather
 weight
+max_time_point
+max_time_point_index
+max_time_point_stand
+max_time_point_devi

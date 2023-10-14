@@ -27,9 +27,16 @@ def data_check( data ):
         if n == 0:
             n = 1
 
+        one_rank_count = 0
+
+        for r in range( 0, query ):
+            if int( data["answer"][i][r] ) == 1:
+                one_rank_count += 1
+
         for r in range( 0, query ):
             current_data = data["teacher"][i][r]
             first_rank = int( data["answer"][i][r] )
+            horce_body = data["horce_body"][i][r]
             current_answer = first_rank
 
             if first_rank / n < 1:
@@ -37,8 +44,16 @@ def data_check( data ):
             elif first_rank / n > 2:
                 current_answer += 1
 
-            if first_rank == 1 or first_rank == 2:
+            if first_rank == 1:
                 current_answer -= 1
+
+                if one_rank_count == 1:
+                    current_answer -= 2
+                
+            elif first_rank == 2:
+                current_answer -= 1
+
+            current_answer += ( horce_body / 4 )
 
             if year in lib.test_years:
                 result["test_teacher"].append( current_data )
@@ -103,7 +118,6 @@ def score_check( simu_data, model, upload = False ):
 
             check_answer = check_data[i]["answer"]
             before_score = current_score
-            #predict_score = int( check_data[i]["score"] + 0.5 )
             simu_predict_data[race_id][check_data[i]["horce_id"]] = {}
             simu_predict_data[race_id][check_data[i]["horce_id"]]["index"] = predict_score
             simu_predict_data[race_id][check_data[i]["horce_id"]]["score"] = check_data[i]["score"]
@@ -111,7 +125,7 @@ def score_check( simu_data, model, upload = False ):
 
             if year in lib.test_years:
                 score1 += math.pow( predict_score - check_answer, 2 )
-                score2 += math.pow( max( int( check_data[i]["score"] + 0.5 ), 1 ) - check_answer, 2 )
+                score2 += math.pow( min( max( int( check_data[i]["score"] + 0.5 ), 1 ), len( check_data ) ) - check_answer, 2 )
                 count += 1            
             
     score1 /= count
