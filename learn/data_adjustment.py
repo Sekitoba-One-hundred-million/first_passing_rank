@@ -48,8 +48,8 @@ def data_check( data ):
                 current_answer -= 1
 
                 if one_rank_count == 1:
-                    current_answer -= 2
-                
+                    current_answer -= 1
+                    
             elif first_rank == 2:
                 current_answer -= 1
 
@@ -126,7 +126,7 @@ def score_check( simu_data, model, upload = False ):
             if year in lib.test_years:
                 score1 += math.pow( predict_score - check_answer, 2 )
                 score2 += math.pow( min( max( int( check_data[i]["score"] + 0.5 ), 1 ), len( check_data ) ) - check_answer, 2 )
-                count += 1            
+                count += 1
             
     score1 /= count
     score1 = math.sqrt( score1 )
