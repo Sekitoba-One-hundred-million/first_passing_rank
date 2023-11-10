@@ -37,6 +37,7 @@ dm.dl.file_set( "first_passing_true_skill_data.pickle" )
 dm.dl.file_set( "last_passing_true_skill_data.pickle" )
 dm.dl.file_set( "predict_train_score.pickle" )
 dm.dl.file_set( "predict_pace_data.pickle" )
+dm.dl.file_set( "predict_rough_race_data.pickle" )
 
 class OnceData:
     def __init__( self ):
@@ -59,6 +60,7 @@ class OnceData:
         self.trainer_judgment_rate_data = dm.dl.data_get( "trainer_judgment_rate_data.pickle" )
         self.predict_train_score = dm.dl.data_get( "predict_train_score.pickle" )
         self.predict_pace_data = dm.dl.data_get( "predict_pace_data.pickle" )
+        self.predict_rough_race_data = dm.dl.data_get( "predict_rough_race_data.pickle" )
 
         self.stride_ablity = StrideAblity()
         self.race_high_level = RaceHighLevel()
@@ -143,9 +145,13 @@ class OnceData:
             return
 
         predict_pace = 0
+        predict_rough_rate = -1
 
         if race_id in self.predict_pace_data:
             predict_pace = self.predict_pace_data[race_id]
+
+        if race_id in self.predict_rough_race_data:
+            predict_rough_rate = self.predict_rough_race_data[race_id]
         
         current_horce_body = self.corner_horce_body[race_id]
         min_corner_key = min( self.corner_horce_body[race_id] )
@@ -645,6 +651,7 @@ class OnceData:
             t_instance[data_name.speed_index_index] = \
               current_race_data[data_name.speed_index_index].index( current_race_data[data_name.speed_index][count] )
             t_instance[data_name.speed_index_stand] = current_race_data[data_name.speed_index_stand][count]
+            t_instance[data_name.predict_rough_rate] = predict_rough_rate
 
             str_index = "_index"
             for data_key in current_race_data.keys():

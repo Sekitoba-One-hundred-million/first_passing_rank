@@ -311,3 +311,4 @@ class Name:
         self.max_time_point_index = "max_time_point_index"
         self.max_time_point_stand = "max_time_point_stand"
         self.max_time_point_devi = "max_time_point_devi"
+        self.predict_rough_rate = "predict_rough_rate"
