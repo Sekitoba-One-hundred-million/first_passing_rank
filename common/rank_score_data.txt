@@ -248,3 +248,9 @@ max_time_point_index
 max_time_point_stand
 max_time_point_devi
 predict_rough_rate
+condition_devi
+condition_devi_index
+condition_devi_stand
+condition_devi_devi
+predict_netkeiba_pace
+predict_netkeiba_deployment
