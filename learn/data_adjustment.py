@@ -17,7 +17,7 @@ def data_check( data ):
         year = data["year"][i]
         query = len( data["teacher"][i] )
 
-        if year in lib.test_years:
+        if lib.test_year_check( year ):
             result["test_query"].append( query )
         else:
             result["query"].append( query )
@@ -39,23 +39,7 @@ def data_check( data ):
             horce_body = data["horce_body"][i][r]
             current_answer = first_rank
 
-            #if first_rank / n < 1:
-            #    current_answer -= 1
-            #elif first_rank / n > 2:
-            #    current_answer += 1
-
-            #if first_rank == 1:
-            #    current_answer -= 1
-
-            #    if one_rank_count == 1:
-            #        current_answer -= 1
-                    
-            #elif first_rank == 2:
-            #    current_answer -= 1
-
-            #current_answer += ( horce_body / 4 )
-
-            if year in lib.test_years:
+            if lib.test_year_check( year ):
                 result["test_teacher"].append( current_data )
                 result["test_answer"].append( current_answer )
             else:
@@ -64,9 +48,8 @@ def data_check( data ):
 
     return result
 
-def score_check( simu_data, model, upload = False ):
-    score1 = 0
-    score2 = 0
+def score_check( simu_data, model, score_years = lib.test_years, upload = False ):
+    score = 0
     count = 0
     simu_predict_data = {}
     predict_use_data = []
@@ -105,15 +88,15 @@ def score_check( simu_data, model, upload = False ):
             simu_predict_data[race_id][check_data[i]["horce_id"]]["score"] = min( max( check_data[i]["score"], 1 ), len( check_data ) )
             simu_predict_data[race_id][check_data[i]["horce_id"]]["stand"] = stand_score_list[i]
 
-            if year in lib.test_years:
-                score2 += math.pow( min( max( int( check_data[i]["score"] ), 1 ), len( check_data ) ) - check_answer, 2 )
+            if year in score_years:
+                score += math.pow( min( max( int( check_data[i]["score"] ), 1 ), len( check_data ) ) - check_answer, 2 )
                 count += 1
             
-    score2 /= count
-    score2 = math.sqrt( score2 )
-    print( "score2: {}".format( score2 ) )
+    score /= count
+    score = math.sqrt( score )
+    print( "score: {}".format( score ) )
 
     if upload:
         dm.pickle_upload( "predict_first_passing_rank.pickle", simu_predict_data )
 
-    return score1, score2
+    return score
