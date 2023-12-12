@@ -3,8 +3,6 @@ all_horce_num
 ave_burden_weight_diff
 ave_first_passing_rank
 ave_past_ave_first_horce_body
-ave_past_max_first_horce_body
-ave_past_min_first_horce_body
 ave_race_horce_first_passing_true_skill
 ave_race_horce_true_skill
 ave_race_jockey_first_passing_true_skill

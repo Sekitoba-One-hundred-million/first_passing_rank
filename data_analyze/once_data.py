@@ -187,7 +187,7 @@ class OnceData:
         two_popular_limb = -1
         one_popular_odds = -1
         two_popular_odds = -1
-        
+
         for horce_id in self.race_data[k].keys():
             current_data, past_data = lib.race_check( self.horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
@@ -321,6 +321,7 @@ class OnceData:
             current_year = cd.year()
             horce_birth_day = int( horce_id[0:4] )
             age = current_year - horce_birth_day
+                
             current_time_index = self.time_index.main( horce_id, pd.past_day_list() )
             speed, up_speed, pace_speed = pd.speed_index( self.baba_index_data[horce_id] )
             corner_diff_rank_ave = pd.corner_diff_rank()
@@ -551,13 +552,12 @@ class OnceData:
                         break
 
             t_instance = {}
-            t_instance[data_name.age] = age
+            #t_instance[data_name.age] = current_race_data[data_name]
             t_instance[data_name.all_horce_num] = cd.all_horce_num()
             t_instance[data_name.ave_burden_weight_diff] = ave_burden_weight_diff
             t_instance[data_name.ave_first_passing_rank] = ave_first_passing_rank
-            t_instance[data_name.ave_past_ave_first_horce_body] = ave_past_ave_first_horce_body - past_ave_first_horce_body
-            t_instance[data_name.ave_past_max_first_horce_body] = ave_past_max_first_horce_body - past_max_first_horce_body
-            t_instance[data_name.ave_past_min_first_horce_body] = ave_past_min_first_horce_body - past_min_first_horce_body
+            t_instance[data_name.ave_past_ave_first_horce_body] = \
+              ave_past_ave_first_horce_body - current_race_data[data_name.past_ave_first_horce_body][count]
             t_instance[data_name.ave_race_horce_true_skill] = \
               ave_race_horce_true_skill - current_race_data[data_name.horce_true_skill][count]
             t_instance[data_name.ave_race_jockey_true_skill] = \
