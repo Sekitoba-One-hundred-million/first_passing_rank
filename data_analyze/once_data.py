@@ -480,7 +480,7 @@ class OnceData:
             if not before_cd == None:
                 before_speed_score = before_cd.speed()
                 before_diff_score = before_cd.diff()
-                before_id_weight_score = self.division( min( max( before_cd.id_weight(), -10 ), 10 ), 2 )
+                before_id_weight_score = before_cd.id_weight()
                 before_popular = before_cd.popular()
                 before_passing_list = before_cd.passing_rank().split( "-" )
                 before_rank = before_cd.rank()
@@ -645,7 +645,6 @@ class OnceData:
             t_instance[data_name.one_popular_odds] = one_popular_odds
             t_instance[data_name.one_rate] = pd.one_rate()
             t_instance[data_name.pace_up] = pd.pace_up_check()
-            t_instance[data_name.past_std_first_horce_body] = past_std_first_horce_body
             t_instance[data_name.place] = place_num
             t_instance[data_name.popular] = cd.popular()
             t_instance[data_name.popular_rank] = popular_rank
