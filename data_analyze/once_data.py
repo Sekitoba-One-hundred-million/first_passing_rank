@@ -332,7 +332,7 @@ class OnceData:
 
             for param in self.jockey_judgement_param_list:
                 jockey_judgment = -1000
-                
+
                 if race_id in self.jockey_judgment_data and horce_id in self.jockey_judgment_data[race_id]:
                     jockey_judgment = self.jockey_judgment_data[race_id][horce_id][param]
                     
