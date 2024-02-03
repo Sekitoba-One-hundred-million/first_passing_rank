@@ -355,7 +355,7 @@ class OnceData:
             current_race_data[data_name.passing_regression].append( pd.passing_regression() )
             current_race_data[data_name.diff_pace_first_passing].append( pd.diff_pace_first_passing() )
             current_race_data[data_name.diff_pace_time].append( pd.diff_pace_time() )
-            current_race_data[data_name.max_time_point].append( pd.max_time_point() )
+            current_race_data[data_name.max_time_point].append( pd.max_time_point() )            
             horce_id_list.append( horce_id )
 
         if len( horce_id_list ) < 2:
