@@ -182,12 +182,6 @@ class OnceData:
             jockey_id = self.race_horce_data.data[horce_id]["jockey_id"]
             trainer_id = self.race_horce_data.data[horce_id]["trainer_id"]
 
-            horce_first_passing_true_skill = -1000
-            jockey_first_passing_true_skill = -1000
-            trainer_first_passing_true_skill = -1000
-            horce_last_passing_true_skill = -1000
-            jockey_last_passing_true_skill = -1000
-
             horce_true_skill = self.race_horce_data.data[horce_id]["horce_true_skill"]
             jockey_true_skill = self.race_horce_data.data[horce_id]["jockey_true_skill"]
             trainer_true_skill = self.race_horce_data.data[horce_id]["trainer_true_skill"]
@@ -206,7 +200,7 @@ class OnceData:
             past_first_horce_body_list = pd.past_first_horce_body_list()
 
             if not len( past_first_horce_body_list ) == 0:
-                past_min_first_horce_body = lib.min_check( past_first_horce_body_list )
+                past_min_first_horce_body = lib.minimum( past_first_horce_body_list )
                 past_max_first_horce_body = lib.max_check( past_first_horce_body_list )
                 past_ave_first_horce_body = lib.average( past_first_horce_body_list )
 
@@ -366,7 +360,6 @@ class OnceData:
                 pass
 
             key_horce_num = str( int( horce_num ) )
-            min_current_corner_key = lib.min_check( current_horce_body )
 
             if not min_corner_key in current_horce_body or \
               not key_horce_num in current_horce_body[min_corner_key]:
