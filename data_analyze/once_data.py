@@ -531,9 +531,7 @@ class OnceData:
             t_instance[data_name.min_up_rate] = lib.minus( min_up_rate, current_race_data[data_name.up_rate][count] )
             t_instance[data_name.money] = pd.get_money()
             t_instance[data_name.my_limb_count] = current_race_data[data_name.my_limb_count][key_limb]
-            t_instance[data_name.odds] = cd.odds()
             t_instance[data_name.one_popular_limb] = one_popular_limb
-            t_instance[data_name.one_popular_odds] = one_popular_odds
             t_instance[data_name.one_rate] = pd.one_rate()
             t_instance[data_name.pace_up] = pd.pace_up_check( self.race_data.data["up_pace_regressin"] )
             t_instance[data_name.place] = place_num
@@ -556,7 +554,6 @@ class OnceData:
             t_instance[data_name.three_rate] = pd.three_rate()
             t_instance[data_name.trainer_rank] = self.trainer_analyze.rank( race_id, horce_id )
             t_instance[data_name.two_popular_limb] = two_popular_limb
-            t_instance[data_name.two_popular_odds] = two_popular_odds
             t_instance[data_name.two_rate] = pd.two_rate()
             t_instance[data_name.up3_standard_value] = up3_standard_value
             t_instance[data_name.weather] = cd.weather()
