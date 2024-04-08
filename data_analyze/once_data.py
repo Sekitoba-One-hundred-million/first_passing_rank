@@ -564,6 +564,7 @@ class OnceData:
             t_instance[data_name.speed_index_stand] = current_race_data[data_name.speed_index_stand][count]
             t_instance[data_name.predict_netkeiba_pace] = predict_netkeiba_pace
             t_instance[data_name.predict_netkeiba_deployment] = predict_netkeiba_deployment
+            t_instance[data_name.odds] = cd.odds()
 
             str_index = "_index"
             for data_key in current_race_data.keys():
