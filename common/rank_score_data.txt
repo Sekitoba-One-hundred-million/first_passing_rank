@@ -175,6 +175,7 @@ min_speed_index
 min_up_rate
 money
 my_limb_count
+odds
 one_popular_limb
 one_rate
 pace_up
