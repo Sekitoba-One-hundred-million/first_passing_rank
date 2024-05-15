@@ -74,6 +74,11 @@ leading_power_min
 leading_power_max
 leading_power_ave_index
 leading_power_ave_stand
+leading_power_rate_ave
+leading_power_rate_min
+leading_power_rate_max
+leading_power_rate_ave_index
+leading_power_rate_ave_stand
 pursuing_power_ave
 pursuing_power_min
 pursuing_power_max
@@ -231,6 +236,12 @@ place
 popular
 popular_rank
 predict_pace
+predict_pace_regression
+predict_before_pace_regression
+predict_after_pace_regression
+predict_pace_conv
+predict_first_up3
+predict_last_up3
 predict_train_score
 predict_train_score_index
 predict_train_score_stand

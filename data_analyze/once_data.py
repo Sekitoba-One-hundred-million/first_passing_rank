@@ -119,7 +119,7 @@ class OnceData:
         if key_kind == "0" or key_kind == "3":
             return
 
-        predict_pace = 0
+        predict_pace = {}
         predict_netkeiba_pace = -1
 
         if race_id in self.predict_pace_data:
@@ -537,7 +537,6 @@ class OnceData:
             t_instance[data_name.place] = place_num
             t_instance[data_name.popular] = cd.popular()
             t_instance[data_name.popular_rank] = popular_rank
-            t_instance[data_name.predict_pace] = predict_pace
             t_instance[data_name.std_past_ave_first_horce_body] = std_past_ave_first_horce_body
             t_instance[data_name.std_past_max_first_horce_body] = std_past_max_first_horce_body
             t_instance[data_name.std_past_min_first_horce_body] = std_past_min_first_horce_body
@@ -566,6 +565,18 @@ class OnceData:
             t_instance[data_name.predict_netkeiba_deployment] = predict_netkeiba_deployment
             t_instance[data_name.odds] = cd.odds()
 
+            t_instance[data_name.predict_pace] = -1000
+            t_instance[data_name.predict_pace_regression] = -1000
+            t_instance[data_name.predict_before_pace_regression] = -1000
+            t_instance[data_name.predict_after_pace_regression] = -1000
+            t_instance[data_name.predict_pace_conv] = -1000
+
+            for pace_key in lib.predict_pace_key_list:
+                if pace_key in predict_pace:
+                    t_instance["predict_"+pace_key] = predict_pace[pace_key]
+                else:
+                    t_instance["predict_"+pace_key] = -1000
+            
             str_index = "_index"
             for data_key in current_race_data.keys():
                 if len( current_race_data[data_key] ) == 0 or \
