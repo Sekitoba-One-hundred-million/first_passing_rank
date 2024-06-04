@@ -238,7 +238,7 @@ class OnceData:
                     current_race_data[stride_data_key+"_"+math_key].append( stride_ablity_data[stride_data_key][math_key] )
 
             for param in self.jockey_judgement_param_list:
-                jockey_judgment = self.race_horce_data.data[horce_id]["jockey_judgment"][param]                    
+                jockey_judgment = self.race_horce_data.data[horce_id]["jockey_judgment"][param]
                 current_race_data["jockey_judgment_{}".format( param )].append( jockey_judgment )
 
             current_race_data[data_name.horce_true_skill].append( horce_true_skill )

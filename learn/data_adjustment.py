@@ -63,6 +63,7 @@ def score_check( simu_data, model, score_years = lib.test_years, upload = False 
 
     for race_id in simu_data.keys():
         year = race_id[0:4]
+        race_place_num = race_id[4:6]
         check_data = []
         stand_score_list = []
         simu_predict_data[race_id] = {}
