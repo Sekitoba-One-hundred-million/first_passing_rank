@@ -256,3 +256,6 @@ max_time_point_stand
 max_time_point_devi
 predict_netkeiba_pace
 predict_netkeiba_deployment
+stamina
+stamina_index
+stamina_stand

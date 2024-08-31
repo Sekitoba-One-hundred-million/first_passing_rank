@@ -329,3 +329,6 @@ class Name:
         self.condition_devi_devi = "condition_devi_devi"
         self.predict_netkeiba_pace = "predict_netkeiba_pace"
         self.predict_netkeiba_deployment = "predict_netkeiba_deployment"
+        self.stamina = "stamina"
+        self.stamina_index = "stamina_index"
+        self.stamina_stand = "stamina_stand"

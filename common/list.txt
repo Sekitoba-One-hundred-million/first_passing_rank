@@ -327,3 +327,6 @@ condition_devi_stand
 condition_devi_devi
 predict_netkeiba_pace
 predict_netkeiba_deployment
+stamina
+stamina_index
+stamina_stand
