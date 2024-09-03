@@ -18,7 +18,6 @@ from common.name import Name
 
 data_name = Name()
 
-dm.dl.file_set( "predict_train_score.pickle" )
 dm.dl.file_set( "predict_pace_data.pickle" )
 
 class OnceData:
@@ -29,7 +28,6 @@ class OnceData:
         self.trainer_data = ps.TrainerData()
         self.jockey_data = ps.JockeyData()
 
-        self.predict_train_score = dm.dl.data_get( "predict_train_score.pickle" )
         self.predict_pace_data = dm.dl.data_get( "predict_pace_data.pickle" )
 
         self.stride_ablity = StrideAblity( self.race_data )
@@ -217,11 +215,6 @@ class OnceData:
                 two_popular_limb = limb_math
                 two_popular_odds = odds
 
-            train_score = -1000
-
-            if race_id in self.predict_train_score and horce_id in self.predict_train_score[race_id]:
-                train_score = self.predict_train_score[race_id][horce_id]
-
             horce_num = int( cd.horce_number() )
             stride_ablity_data = self.stride_ablity.ablity_create( cd, pd )
                 
@@ -259,7 +252,6 @@ class OnceData:
             current_race_data[data_name.past_max_first_horce_body].append( past_max_first_horce_body )
             current_race_data[data_name.past_ave_first_horce_body].append( past_ave_first_horce_body )
             current_race_data[data_name.past_std_first_horce_body].append( past_std_first_horce_body )
-            current_race_data[data_name.predict_train_score].append( train_score )
             current_race_data[data_name.first_result_rank_diff].append( pd.first_result_rank_diff() )
             current_race_data[data_name.last_result_rank_diff].append( pd.last_result_rank_diff() )
             current_race_data[data_name.best_first_passing_rank].append( pd.best_first_passing_rank() )
