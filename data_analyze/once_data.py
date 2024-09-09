@@ -91,9 +91,6 @@ class OnceData:
         dm.dl.data_clear()
     
     def create( self, race_id ):
-        if not race_id == "202409010301":
-            return
-
         self.race_data.get_all_data( race_id )
         self.race_horce_data.get_all_data( race_id )
 

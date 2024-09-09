@@ -66,7 +66,7 @@ def main( update = False ):
 
             for k in instance["data"].keys():
                 result["data"][k].extend( instance["data"][k] )
-        return
+
         dm.pickle_upload( lib.name.data_name(), result["data"] )
         dm.pickle_upload( lib.name.simu_name(), result["simu"] )
     else:
