@@ -9,7 +9,7 @@ def teacher_stand( data, simu_data, state = "test" ):
     data_list = []
     """
     for i in range( 0, len( data["answer"] ) ):
-        data_check = lib.test_year_check( data["year"][i], state )
+        data_check = lib.testYearCheck( data["year"][i], state )
 
         if not data_check == "teacher":
             continue
@@ -31,7 +31,7 @@ def teacher_stand( data, simu_data, state = "test" ):
         data_list.clear()
         
         for i in range( 0, len( data["teacher"] ) ):
-            data_check = lib.test_year_check( data["year"][i], state )
+            data_check = lib.testYearCheck( data["year"][i], state )
 
             if not data_check == "teacher":
                 continue
@@ -70,7 +70,7 @@ def data_check( data, state = "test" ):
 
     for i in range( 0, len( data["teacher"] ) ):
         query = len( data["teacher"][i] )
-        data_check = lib.test_year_check( data["year"][i], state )
+        data_check = lib.testYearCheck( data["year"][i], state )
         
         if data_check == "test":
             result["test_query"].append( query )
