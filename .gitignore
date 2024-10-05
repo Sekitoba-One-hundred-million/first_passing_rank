@@ -6,3 +6,6 @@
 /learn/common/
 /data_analyze/__pycache__/
 /data_analyze/common/
+
+.devenv/
+.direnv/
