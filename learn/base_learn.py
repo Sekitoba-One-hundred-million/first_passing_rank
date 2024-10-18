@@ -26,6 +26,8 @@ def lg_main( data ):
         params["lambda_l1"] = 0
         params["lambda_l2"] = 0
 
+    print( len( np.array( data["teacher"] ).shape ), np.array( data["teacher"] ).shape )
+    print( len( np.array( data["test_teacher"] ).shape ), np.array( data["test_teacher"] ).shape )
     lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
     lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
     
@@ -48,7 +50,6 @@ def lg_main( data ):
     bst = lgb.train( params = lgbm_params,
                      train_set = lgb_train,     
                      valid_sets = [lgb_train, lgb_vaild ],
-                     verbose_eval = 10,
                      num_boost_round = 5000 )
     
     dm.pickle_upload( lib.name.model_name(), bst )

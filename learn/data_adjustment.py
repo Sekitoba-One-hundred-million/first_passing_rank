@@ -5,60 +5,6 @@ from tqdm import tqdm
 import SekitobaLibrary as lib
 import SekitobaDataManage as dm
 
-def teacher_stand( data, simu_data, state = "test" ):
-    data_list = []
-    """
-    for i in range( 0, len( data["answer"] ) ):
-        data_check = lib.testYearCheck( data["year"][i], state )
-
-        if not data_check == "teacher":
-            continue
-
-        for r in range( 0, len( data["answer"][i] ) ) :
-            data_list.append( data["answer"][i][r] )
-
-    ave_data = lib.average( data_list )
-    std_data = lib.stdev( data_list )
-
-    for i in range( 0, len( data["answer"] ) ):
-        for r in range( 0, len( data["answer"][i] ) ) :
-            value = data["answer"][i][r]
-
-            if not value == lib.base_abort:
-                data["answer"][i][r] = ( value - ave_data ) / std_data
-    """
-    for t in tqdm( range( 0, len( data["teacher"][0][0] ) ) ):
-        data_list.clear()
-        
-        for i in range( 0, len( data["teacher"] ) ):
-            data_check = lib.testYearCheck( data["year"][i], state )
-
-            if not data_check == "teacher":
-                continue
-
-            for r in range( 0, len( data["teacher"][i] ) ):
-                data_list.append( data["teacher"][i][r][t] )
-
-        ave_data = lib.average( data_list )
-        std_data = lib.stdev( data_list )
-
-        if std_data == 0:
-            continue
-
-        for i in range( 0, len( data["teacher"] ) ):
-            for r in range( 0, len( data["teacher"][i] ) ):
-                value = data["teacher"][i][r][t]
-
-                if not value == lib.base_abort:
-                    data["teacher"][i][r][t] = ( value - ave_data ) / std_data
-
-        for race_id in simu_data.keys():
-            for horce_id in simu_data[race_id].keys():
-                value = simu_data[race_id][horce_id]["data"][t]
-
-                if not value == lib.base_abort:
-                    simu_data[race_id][horce_id]["data"][t] = ( value - ave_data ) / std_data
-
 def data_check( data, state = "test" ):
     result = {}
     result["teacher"] = []
@@ -71,7 +17,7 @@ def data_check( data, state = "test" ):
     for i in range( 0, len( data["teacher"] ) ):
         query = len( data["teacher"][i] )
         data_check = lib.testYearCheck( data["year"][i], state )
-        
+
         if data_check == "test":
             result["test_query"].append( query )
         elif data_check == "teacher":
