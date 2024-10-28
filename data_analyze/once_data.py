@@ -207,8 +207,7 @@ class OnceData:
                 
             current_year = cd.year()
             horce_birth_day = int( horce_id[0:4] )
-            age = current_year - horce_birth_day
-                
+            age = current_year - horce_birth_day                
             current_time_index = self.time_index.main( horce_id, pd.pastDayList() )
             speed, up_speed, pace_speed = pd.speedIndex( self.horce_data.data[horce_id]["baba_index"] )
             corner_diff_rank_ave = pd.corner_diff_rank()
