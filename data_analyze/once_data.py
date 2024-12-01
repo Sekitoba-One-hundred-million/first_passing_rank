@@ -503,7 +503,7 @@ class OnceData:
 
             for judge_key in judgement_data.keys():
                 t_instance[judge_key] = judgement_data[judge_key]
-                    
+
             t_list = self.data_list_create( t_instance )
             lib.dicAppend( self.simu_data, race_id, {} )
             self.simu_data[race_id][horce_id] = {}

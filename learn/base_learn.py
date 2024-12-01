@@ -10,12 +10,12 @@ import SekitobaLibrary as lib
 import SekitobaDataManage as dm
 from learn import data_adjustment
 
-def lg_main( data ):
+def lg_main( data, index = None ):
     params = {}
     
-    if os.path.isfile( "best_params.json" ):
+    if os.path.isfile( "best_params.json" ) and not index is None:
         f = open( "best_params.json", "r" )
-        params = json.load( f )
+        params = json.load( f )[index]
         f.close()
     else:
         params["learning_rate"] = 0.01
@@ -26,8 +26,6 @@ def lg_main( data ):
         params["lambda_l1"] = 0
         params["lambda_l2"] = 0
 
-    print( len( np.array( data["teacher"] ).shape ), np.array( data["teacher"] ).shape )
-    print( len( np.array( data["test_teacher"] ).shape ), np.array( data["test_teacher"] ).shape )
     lgb_train = lgb.Dataset( np.array( data["teacher"] ), np.array( data["answer"] ) )
     lgb_vaild = lgb.Dataset( np.array( data["test_teacher"] ), np.array( data["test_answer"] ) )
     
@@ -81,12 +79,14 @@ def importance_check( model ):
         wf.write( "{}: {}\n".format( result[i]["key"], result[i]["score"] ) )        
 
 def main( data, simu_data, state = "test" ):
-    #data_adjustment.teacher_stand( data, simu_data, state = state )
+    modelList = []
     learn_data = data_adjustment.data_check( data, state = state )
 
-    model = lg_main( learn_data )
-    importance_check( model )
-    
-    data_adjustment.score_check( simu_data, model, score_years = lib.simu_years, upload = True )
+    for i in range( 0, 5 ):
+        model = lg_main( learn_data, index = i )
+        modelList.append( model )
+        
+    importance_check( modelList[0] )
+    data_adjustment.score_check( simu_data, modelList, score_years = lib.simu_years, upload = True )
     
     return model
