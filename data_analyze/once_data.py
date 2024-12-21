@@ -499,7 +499,7 @@ class OnceData:
             t_instance[data_name.predict_netkeiba_deployment] = predict_netkeiba_deployment
             t_instance[data_name.odds] = cd.odds()
             t_instance.update( getHorceData.getPredictPace( predict_pace ) )
-            t_instance.update( lib.HorceTeacherAnalyze( current_race_data, t_instance, count ) )
+            t_instance.update( lib.horceTeacherAnalyze( current_race_data, t_instance, count ) )
 
             for judge_key in judgement_data.keys():
                 t_instance[judge_key] = judgement_data[judge_key]
