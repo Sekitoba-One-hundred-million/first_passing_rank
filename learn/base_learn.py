@@ -49,8 +49,6 @@ def lg_main( data, index = None ):
                      train_set = lgb_train,     
                      valid_sets = [lgb_train, lgb_vaild ],
                      num_boost_round = 5000 )
-    
-    dm.pickle_upload( lib.name.model_name(), bst )
         
     return bst
     
@@ -88,5 +86,4 @@ def main( data, simu_data, state = "test" ):
         
     importance_check( modelList[0] )
     data_adjustment.score_check( simu_data, modelList, score_years = lib.simu_years, upload = True )
-    
-    return model
+    dm.pickle_upload( lib.name.model_name(), modelList )
