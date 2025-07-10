@@ -188,7 +188,7 @@ class OnceData:
             trainer_first_passing_true_skill = self.race_horce_data.data[horce_id]["trainer_first_passing_true_skill"]
 
             horce_last_passing_true_skill  =self.race_horce_data.data[horce_id]["horce_last_passing_true_skill"]
-            jockey_last_passing_true_skill = self.race_horce_data.data[horce_id]["trainer_last_passing_true_skill"]
+            jockey_last_passing_true_skill = self.race_horce_data.data[horce_id]["jockey_last_passing_true_skill"]
 
             past_min_first_horce_body, past_max_first_horce_body, past_ave_first_horce_body, past_std_first_horce_body = \
               getHorceData.getFirstHorceBody()
