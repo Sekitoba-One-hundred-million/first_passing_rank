@@ -467,7 +467,7 @@ class OnceData:
             t_instance[data_name.my_limb_count] = current_race_data[data_name.my_limb_count][getHorceData.key_limb]
             t_instance[data_name.one_popular_limb] = one_popular_limb
             t_instance[data_name.one_rate] = pd.one_rate()
-            t_instance[data_name.pace_up] = pd.pace_up_check( self.race_data.data["up_pace_regressin"] )
+            #t_instance[data_name.pace_up] = pd.pace_up_check( self.race_data.data["up_pace_regressin"] )
             t_instance[data_name.place] = cd.place()
             t_instance[data_name.popular] = cd.popular()
             t_instance[data_name.popular_rank] = popular_rank
