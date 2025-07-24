@@ -67,7 +67,7 @@ class OnceData:
         
         for name in self.data_name_list:
             try:
-                result.append( data_dict[name] )
+                result.append( round( data_dict[name], 3 ) )
                 write_instance.append( name )
             except:
                 continue
