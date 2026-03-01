@@ -100,11 +100,10 @@ def score_check( simu_data, modelList, score_years = lib.test_years, upload = Fa
             simu_predict_data[race_id][check_data[i]["horce_id"]]["stand"] = stand_score_list[i]
 
             if year in score_years:
-                score += math.pow( min( max( int( check_data[i]["score"] ), 1 ), len( check_data ) ) - check_answer, 2 )
+                score += abs( check_data[i]["score"] - check_answer )
                 count += 1
             
     score /= count
-    score = math.sqrt( score )
     print( "score: {}".format( score ) )
 
     if upload:

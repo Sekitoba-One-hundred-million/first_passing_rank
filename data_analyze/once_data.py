@@ -43,7 +43,8 @@ class OnceData:
         self.jockey_judgement_rate_param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place" ]
         self.trainer_judgement_param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place" ]
         self.trainer_judgement_rate_param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place" ]
-        self.result = { "answer": [], "teacher": [], "query": [], "year": [], "level": [], "diff": [], "horce_body": [] }
+        self.result = { "answer": [], "teacher": [], "query": [], "year": [], \
+                        "level": [], "diff": [], "horce_body": [], "category": {} }
         self.data_name_read()
 
     def data_name_read( self ):
@@ -63,17 +64,16 @@ class OnceData:
 
     def data_list_create( self, data_dict ):
         result = []
-        write_instance = []
+        name_list = sorted( list( data_dict.keys() ) )
         
-        for name in self.data_name_list:
-            try:
-                result.append( round( data_dict[name], 3 ) )
-                write_instance.append( name )
-            except:
-                continue
+        for data_name in name_list:
+            if data_dict[data_name] == lib.escapeValue:
+                result.append( math.nan )
+            else:
+                result.append( round( data_dict[data_name], 3 ) )
 
         if len( self.write_data_list ) == 0:
-            self.write_data_list = copy.deepcopy( write_instance )
+            self.write_data_list = copy.deepcopy( name_list )
 
         return result
 
@@ -173,7 +173,7 @@ class OnceData:
             if getHorceData.limb_math == 2:
                 escape_limb2_count += 1
 
-            escape_within_rank = -1
+            escape_within_rank = lib.escapeValue
             
             if getHorceData.limb_math == 1 or getHorceData.limb_math == 2:
                 escape_within_rank = cd.horce_number()
@@ -348,7 +348,7 @@ class OnceData:
             popular_rank = getHorceData.getPopularRank()
             before_first_passing_rank, before_last_passing_rank = getHorceData.getBeforePassingRank()
 
-            escape_within_rank = -1
+            escape_within_rank = lib.escapeValue
 
             if getHorceData.limb_math == 1 or getHorceData.limb_math == 2:
                 escape_within_rank = current_race_data[data_name.escape_within_rank].index( getHorceData.horce_num )
@@ -381,8 +381,10 @@ class OnceData:
                     predict_netkeiba_deployment = t
                     break
 
+            category_data = []
             t_instance = {}
             t_instance[data_name.all_horce_num] = cd.all_horce_num()
+            category_data.append( data_name.all_horce_num )
             t_instance[data_name.ave_burden_weight_diff] = ave_burden_weight_diff
             t_instance[data_name.ave_first_passing_rank] = ave_first_passing_rank
             t_instance[data_name.ave_past_ave_first_horce_body] = \
@@ -403,29 +405,42 @@ class OnceData:
             t_instance[data_name.ave_up_rate] = lib.minus( ave_up_rate, current_race_data[data_name.up_rate][count] )
             t_instance[data_name.average_speed] = average_speed            
             t_instance[data_name.baba] = cd.baba_status()
+            category_data.append( data_name.baba )
             t_instance[data_name.before_continue_not_three_rank] = before_continue_not_three_rank     
             t_instance[data_name.before_diff] = before_diff_score
             t_instance[data_name.before_first_passing_rank] = before_first_passing_rank
             t_instance[data_name.before_id_weight] = before_id_weight_score
             t_instance[data_name.before_last_passing_rank] = before_last_passing_rank
             t_instance[data_name.before_popular] = before_popular
+            category_data.append( before_popular )
             t_instance[data_name.before_rank] = before_rank
+            category_data.append( before_rank )
             t_instance[data_name.before_speed] = before_speed_score
             t_instance[data_name.best_weight] = best_weight
             t_instance[data_name.burden_weight] = burden_weight_score
             t_instance[data_name.diff_load_weight] = diff_load_weight
             t_instance[data_name.dist_kind] = cd.dist_kind()
+            category_data.append( data_name.dist_kind )
             t_instance[data_name.dist_kind_count] = dist_kind_count
+            category_data.append( data_name.dist_kind_count )
             t_instance[data_name.escape_limb1_count] = escape_limb1_count
+            category_data.append( data_name.escape_limb1_count )
             t_instance[data_name.escape_limb2_count] = escape_limb2_count
+            category_data.append( data_name.escape_limb2_count )
             t_instance[data_name.escape_within_rank] = escape_within_rank
+            category_data.append( data_name.escape_within_rank )
             t_instance[data_name.high_level_score] = self.race_high_level.data_get( cd, pd, ymd )
             t_instance[data_name.horce_num] = getHorceData.horce_num
+            category_data.append( data_name.horce_num )
             t_instance[data_name.horce_sex] = self.horce_data.data[horce_id]["sex"]
+            category_data.append( data_name.horce_sex )
             t_instance[data_name.jockey_rank] = self.jockey_analyze.rank( race_id, horce_id )
+            category_data.append( data_name.jockey_rank )
             t_instance[data_name.jockey_year_rank] = self.jockey_analyze.year_rank( horce_id, getHorceData.key_before_year )
+            category_data.append( data_name.jockey_year_rank )
             t_instance[data_name.level_score] = pd.level_score( self.race_data.data["money_class_true_skill"] )
             t_instance[data_name.limb] = getHorceData.limb_math
+            category_data.append( data_name.limb )
             t_instance[data_name.match_rank] = pd.match_rank()
             t_instance[data_name.max_past_ave_first_horce_body] = \
               lib.minus( max_past_ave_first_horce_body, current_race_data[data_name.past_ave_first_horce_body][count] )
@@ -469,11 +484,15 @@ class OnceData:
             t_instance[data_name.min_up_rate] = lib.minus( min_up_rate, current_race_data[data_name.up_rate][count] )
             t_instance[data_name.money] = pd.get_money()
             t_instance[data_name.my_limb_count] = current_race_data[data_name.my_limb_count][getHorceData.key_limb]
+            category_data.append( data_name.my_limb_count )
             t_instance[data_name.one_popular_limb] = one_popular_limb
+            category_data.append( data_name.one_popular_limb )
             t_instance[data_name.one_rate] = pd.one_rate()
             #t_instance[data_name.pace_up] = pd.pace_up_check( self.race_data.data["up_pace_regressin"] )
             t_instance[data_name.place] = cd.place()
+            category_data.append( data_name.place )
             t_instance[data_name.popular] = cd.popular()
+            category_data.append( data_name.popular )
             t_instance[data_name.popular_rank] = popular_rank
             t_instance[data_name.std_past_ave_first_horce_body] = std_past_ave_first_horce_body
             t_instance[data_name.std_past_max_first_horce_body] = std_past_max_first_horce_body
@@ -490,17 +509,21 @@ class OnceData:
             t_instance[data_name.three_difference] = pd.three_difference()
             t_instance[data_name.three_rate] = pd.three_rate()
             t_instance[data_name.trainer_rank] = self.trainer_analyze.rank( race_id, horce_id )
+            category_data.append( data_name.trainer_rank )
             t_instance[data_name.two_popular_limb] = two_popular_limb
             t_instance[data_name.two_rate] = pd.two_rate()
             t_instance[data_name.up3_standard_value] = up3_standard_value
             t_instance[data_name.weather] = cd.weather()
+            category_data.append( data_name.weather )
             t_instance[data_name.weight] = getHorceData.getWeightScore()
             t_instance[data_name.speed_index] = current_race_data[data_name.speed_index][count]
             t_instance[data_name.speed_index_index] = \
               current_race_data[data_name.speed_index_index].index( current_race_data[data_name.speed_index][count] )
             t_instance[data_name.speed_index_stand] = current_race_data[data_name.speed_index_stand][count]
             t_instance[data_name.predict_netkeiba_pace] = predict_netkeiba_pace
+            category_data.append( data_name.predict_netkeiba_pace )
             t_instance[data_name.predict_netkeiba_deployment] = predict_netkeiba_deployment
+            category_data.append( data_name.predict_netkeiba_deployment )
             t_instance[data_name.odds] = cd.odds()
             t_instance.update( getHorceData.getPredictPace( predict_pace ) )
             t_instance.update( lib.horce_teacher_analyze( current_race_data, t_instance, count ) )
@@ -527,3 +550,6 @@ class OnceData:
             self.result["year"].append( getHorceData.year )
             self.result["horce_body"].append( answer_horce_body )
             self.result["query"].append( { "q": len( answer_data ), "year": getHorceData.year } )
+
+        if len( self.result["category"] ) == 0:
+            self.result["category"] = category_data
