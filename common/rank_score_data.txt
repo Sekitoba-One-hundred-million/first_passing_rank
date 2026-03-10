@@ -1,7 +1,3 @@
-age
-age_devi
-age_index
-age_stand
 all_horce_num
 ave_burden_weight_diff
 ave_first_passing_rank
@@ -15,7 +11,6 @@ ave_trainer_first_passing_true_skill
 ave_trainer_true_skill
 ave_up_rate
 average_speed
-baba
 before_continue_not_three_rank
 before_diff
 before_first_passing_rank
@@ -37,6 +32,7 @@ burden_weight
 burden_weight_devi
 burden_weight_index
 burden_weight_stand
+change_before_dist
 corner_diff_rank_ave
 corner_diff_rank_ave_devi
 corner_diff_rank_ave_index
@@ -168,30 +164,6 @@ last_result_rank_diff
 last_result_rank_diff_devi
 last_result_rank_diff_index
 last_result_rank_diff_stand
-leading_power_ave
-leading_power_ave_devi
-leading_power_ave_index
-leading_power_ave_stand
-leading_power_max
-leading_power_max_devi
-leading_power_max_index
-leading_power_max_stand
-leading_power_min
-leading_power_min_devi
-leading_power_min_index
-leading_power_min_stand
-leading_power_rate_ave
-leading_power_rate_ave_devi
-leading_power_rate_ave_index
-leading_power_rate_ave_stand
-leading_power_rate_max
-leading_power_rate_max_devi
-leading_power_rate_max_index
-leading_power_rate_max_stand
-leading_power_rate_min
-leading_power_rate_min_devi
-leading_power_rate_min_index
-leading_power_rate_min_stand
 level_score
 limb
 match_rank
@@ -223,7 +195,6 @@ min_trainer_true_skill
 min_up_rate
 money
 my_limb_count
-odds
 one_popular_limb
 one_rate
 passing_regression
@@ -252,6 +223,8 @@ popular_rank
 predict_after_pace_regression
 predict_before_pace_regression
 predict_first_up3
+predict_first_up3_index
+predict_first_up3_stand
 predict_last_up3
 predict_netkeiba_deployment
 predict_netkeiba_pace
@@ -326,5 +299,4 @@ up_rate
 up_rate_devi
 up_rate_index
 up_rate_stand
-weather
 weight

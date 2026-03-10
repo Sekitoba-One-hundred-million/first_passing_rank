@@ -44,6 +44,7 @@ corner_true_skill
 corner_true_skill_index
 corner_true_skill_stand
 corner_true_skill_dive
+change_before_dist
 diff_load_weight
 diff_pace_first_passing
 diff_pace_first_passing_index
@@ -330,3 +331,6 @@ predict_netkeiba_deployment
 stamina
 stamina_index
 stamina_stand
+predict_first_up3
+predict_first_up3_index
+predict_first_up3_stand

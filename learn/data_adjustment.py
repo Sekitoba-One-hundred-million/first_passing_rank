@@ -80,23 +80,23 @@ def score_check( simu_data, modelList, score_years = lib.test_years, upload = Fa
                 predict_score += predict_data[i][c]
 
             predict_score /= len( predict_data )
-            predict_score = min( predict_score, all_horce_num )
+            predict_score = max( min( predict_score, all_horce_num ), 1 )
             c += 1
             answer_rank = simu_data[race_id][horce_id]["answer"]["first_passing_rank"]
             check_data.append( { "horce_id": horce_id, "answer": answer_rank, "score": predict_score } )
-            stand_score_list.append( predict_score )
 
-        stand_score_list = lib.standardization( stand_score_list )
         check_data = sorted( check_data, key = lambda x: x["score"] )
-        before_score = 1
-        next_rank = 1
-        continue_count = 1
+
+        for i in range( 0, len( check_data ) ):
+            stand_score_list.append( check_data[i]["score"] )
+            
+        stand_score_list = lib.standardization( stand_score_list )
         
         for i in range( 0, len( check_data ) ):
             check_answer = check_data[i]["answer"]
             simu_predict_data[race_id][check_data[i]["horce_id"]] = {}
             simu_predict_data[race_id][check_data[i]["horce_id"]]["index"] = i + 1
-            simu_predict_data[race_id][check_data[i]["horce_id"]]["score"] = min( max( check_data[i]["score"], 1 ), len( check_data ) )
+            simu_predict_data[race_id][check_data[i]["horce_id"]]["score"] = check_data[i]["score"]
             simu_predict_data[race_id][check_data[i]["horce_id"]]["stand"] = stand_score_list[i]
 
             if year in score_years:
