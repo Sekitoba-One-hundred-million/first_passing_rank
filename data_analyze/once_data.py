@@ -235,7 +235,8 @@ class OnceData:
             current_race_data[data_name.horce_last_passing_true_skill].append( horce_last_passing_true_skill )
             current_race_data[data_name.jockey_last_passing_true_skill].append( jockey_last_passing_true_skill )
             current_race_data[data_name.corner_diff_rank_ave].append( corner_diff_rank_ave )
-            current_race_data[data_name.speed_index].append( lib.max_check( speed ) + current_time_index["max"] )
+            current_race_data[data_name.speed_index].append( lib.max_check( speed ) )
+            current_race_data[data_name.time_index].append( current_time_index["max"] )
             current_race_data[data_name.up_rate].append( pd.up_rate( key_race_money_class, self.race_data.data["up_kind_ave"] ) )
             current_race_data[data_name.burden_weight].append( cd.burden_weight() )
             #current_race_data[data_name.age].append( age )
@@ -499,7 +500,7 @@ class OnceData:
             #t_instance[data_name.pace_up] = pd.pace_up_check( self.race_data.data["up_pace_regressin"] )
             t_instance[data_name.place] = cd.place()
             category_data.append( data_name.place )
-            t_instance[data_name.popular] = cd.popular()
+            #t_instance[data_name.popular] = cd.popular()
             t_instance[data_name.popular_rank] = popular_rank
             t_instance[data_name.std_past_ave_first_horce_body] = std_past_ave_first_horce_body
             t_instance[data_name.std_past_max_first_horce_body] = std_past_max_first_horce_body

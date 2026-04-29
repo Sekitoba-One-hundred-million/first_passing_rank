@@ -218,7 +218,6 @@ past_std_first_horce_body_devi
 past_std_first_horce_body_index
 past_std_first_horce_body_stand
 place
-popular
 popular_rank
 predict_after_pace_regression
 predict_before_pace_regression
@@ -244,6 +243,7 @@ pursuing_power_min_devi
 pursuing_power_min_index
 pursuing_power_min_stand
 speed_index
+speed_index_devi
 speed_index_index
 speed_index_stand
 stamina
@@ -276,6 +276,10 @@ sustain_power_min_stand
 three_average
 three_difference
 three_rate
+time_index
+time_index_devi
+time_index_index
+time_index_stand
 trainer_first_passing_true_skill
 trainer_first_passing_true_skill_devi
 trainer_first_passing_true_skill_index

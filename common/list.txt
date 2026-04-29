@@ -253,6 +253,9 @@ rank_score_odds
 speed_index
 speed_index_index
 speed_index_stand
+time_index
+time_index_index
+time_index_stand
 std_past_ave_first_horce_body
 std_past_max_first_horce_body
 std_past_min_first_horce_body
