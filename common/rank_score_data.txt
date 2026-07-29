@@ -16,8 +16,6 @@ before_diff
 before_first_passing_rank
 before_id_weight
 before_last_passing_rank
-before_popular
-before_rank
 before_speed
 best_first_passing_rank
 best_first_passing_rank_devi

@@ -46,7 +46,7 @@ class OnceData:
         self.trainer_judgement_param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place" ]
         self.trainer_judgement_rate_param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place" ]
         self.result = { "answer": [], "teacher": [], "query": [], "year": [], \
-                        "level": [], "diff": [], "horce_body": [], "category": {} }
+                        "race_id": [], "diff": [], "horce_body": [], "category": {} }
         self.data_name_read()
 
     def data_name_read( self ):
@@ -426,8 +426,8 @@ class OnceData:
             t_instance[data_name.before_first_passing_rank] = before_first_passing_rank
             t_instance[data_name.before_id_weight] = before_id_weight_score
             t_instance[data_name.before_last_passing_rank] = before_last_passing_rank
-            t_instance[data_name.before_popular] = before_popular
-            t_instance[data_name.before_rank] = before_rank
+            #t_instance[data_name.before_popular] = before_popular
+            #t_instance[data_name.before_rank] = before_rank
             t_instance[data_name.before_speed] = before_speed_score
             t_instance[data_name.best_weight] = best_weight
             t_instance[data_name.burden_weight] = burden_weight_score
@@ -548,9 +548,10 @@ class OnceData:
             self.simu_data[race_id][horce_id] = {}
             self.simu_data[race_id][horce_id]["data"] = t_list
             self.simu_data[race_id][horce_id]["answer"] = { "first_passing_rank": first_passing_rank,
-                                                           "odds": cd.odds(),
-                                                           "popular": cd.popular(),
-                                                           "horce_num": getHorceData.horce_num }
+                                                            "race_id": race_id,
+                                                            "odds": cd.odds(),
+                                                            "popular": cd.popular(),
+                                                            "horce_num": getHorceData.horce_num }
 
             answer_horce_body.append( answer_corner_horce_body )
             answer_data.append( first_passing_rank )
@@ -560,6 +561,7 @@ class OnceData:
             self.result["answer"].append( answer_data )
             self.result["teacher"].append( teacher_data )
             self.result["year"].append( getHorceData.year )
+            self.result["race_id"].append( race_id )
             self.result["horce_body"].append( answer_horce_body )
             self.result["query"].append( { "q": len( answer_data ), "year": getHorceData.year } )
 

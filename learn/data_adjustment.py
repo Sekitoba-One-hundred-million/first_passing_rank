@@ -13,6 +13,7 @@ def data_check( data, state = "test" ):
     result["test_answer"] = []
     result["query"] = []
     result["test_query"] = []
+    result["race_id"] = []
 
     for i in range( 0, len( data["teacher"] ) ):
         query = len( data["teacher"][i] )
@@ -46,10 +47,11 @@ def data_check( data, state = "test" ):
             elif data_check == "teacher":
                 result["teacher"].append( current_data )
                 result["answer"].append( current_answer  )
+                result["race_id"].append( data["race_id"][i] )
 
     return result
 
-def score_check( simu_data, modelList, score_years = lib.test_years, upload = False ):
+def score_check( simu_data, model_list, test_model_list, test_race_id_index_data, score_years = lib.test_years, upload = False ):
     score = 0
     count = 0
     simu_predict_data = {}
@@ -61,9 +63,15 @@ def score_check( simu_data, modelList, score_years = lib.test_years, upload = Fa
 
     c = 0
     predict_data = []
+    test_predict_data = []
 
-    for model in modelList:
-        predict_data.append( model.predict( np.array( predict_use_data ) ) )
+    for i in range( 0, len( model_list ) ):
+        predict_data.append( model_list[i].predict( np.array( predict_use_data ) ) )
+
+    for i in range( 0, len( test_model_list ) ):
+        test_predict_data.append( [] )
+        for r in range( 0, len( test_model_list[i] ) ):
+            test_predict_data[-1].append( test_model_list[i][r].predict( np.array( predict_use_data ) ) )
 
     for race_id in simu_data.keys():
         year = race_id[0:4]
@@ -77,7 +85,10 @@ def score_check( simu_data, modelList, score_years = lib.test_years, upload = Fa
             predict_score = 0
 
             for i in range( 0, len( predict_data ) ):
-                predict_score += predict_data[i][c]
+                if not race_id in test_race_id_index_data[i]:
+                    predict_score += predict_data[i][c]
+                else:
+                    predict_score += test_predict_data[i][test_race_id_index_data[i][race_id]][c]
 
             predict_score /= len( predict_data )
             predict_score = max( min( predict_score, all_horce_num ), 1 )
