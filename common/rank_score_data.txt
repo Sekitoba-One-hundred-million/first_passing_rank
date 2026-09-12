@@ -228,6 +228,7 @@ predict_netkeiba_pace
 predict_pace
 predict_pace_conv
 predict_pace_regression
+predict_race_level
 pursuing_power_ave
 pursuing_power_ave_devi
 pursuing_power_ave_index
